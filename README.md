@@ -1,0 +1,2 @@
+# ScoutBadgeTrackerConsole
+Desktop application for ScoutBadgeTracker
