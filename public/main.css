@@ -6,22 +6,23 @@
 body {
   padding: 0;
   margin: 0;
-  margin-top: 150px;
+  margin-top: 100px;
   background: #eee;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: #622599;
 }
 a,
 a:visited {
-  color: #2c3e50;
+  color: #622599;
 }
 .container {
   margin: 0 auto;
-  max-width: 960px;
+  width: 100%;
+/*  max-width: 960px; */
 }
 
 /* Home */
@@ -40,12 +41,12 @@ a:visited {
   left: 0;
   right: 0;
   margin-top: 0;
-  padding: 30px;
-  background: #2c3e50;
+  padding: 20px;
+  background: #622599;
   color: white;
   display: flex;
   align-items: center;
-  border-bottom: 5px solid #4e6c71;
+  border-bottom: 5px solid #612992;
   z-index: 2;
 }
 #nav a {
@@ -175,7 +176,7 @@ a {
 }
 
 .btn{
-  background-color:#2c3e50;
+  background-color:#622599;
   color: white;
   padding: 10px;
   border-radius: 5px;

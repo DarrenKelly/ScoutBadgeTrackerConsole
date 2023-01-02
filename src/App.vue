@@ -35,7 +35,8 @@ body {
   font-family: "Poppins", sans-serif;
 }
 .container {
-  max-width: 1080px;
+  /*max-width: 1080px;*/
+  max-width: 100%;
   margin: 15px auto;
   overflow: auto;
   min-height: 300px;

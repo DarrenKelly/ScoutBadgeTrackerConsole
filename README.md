@@ -1,5 +1,9 @@
 # ScoutBadgeTrackerConsole
-Desktop application for ScoutBadgeTracker with Vue 3 in Vite.
+Desktop application for ScoutBadgeTracker with Vue 3.
+Should have all the functionality as ScoutBadgeTracker with additional desktop features.
+ScoutBadgeTracker is intened as a mobile app. Its HTML and CSS are expected to diverge 
+from ScoutBadgeTrackerConsole. At some point shared functionality will be refactored to
+a shared library.
 
 ## Recommended IDE Setup
 
