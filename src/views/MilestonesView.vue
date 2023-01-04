@@ -125,7 +125,7 @@ td {
 
 <script>
 import { ref, computed } from "vue";
-import { members, events } from "@/firebase";
+import { members, activities } from "@/firebase";
 
 export default {
   name: "MilestonesView",
@@ -199,7 +199,7 @@ export default {
       var leads = 0;
 
       // @todo: This is O(n2) when it could be done O(n)
-      events.forEach(function (ev) {
+      activities.forEach(function (ev) {
         if (ev.participants) {
           ev.participants.forEach(function (participant) {
             if (scout.id == participant.id) {

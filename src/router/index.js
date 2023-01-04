@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import { config, events } from "@/firebase";
+import { config, activities } from "@/firebase";
 import { FireAuth } from "@/firebaseInit";
 
 const routes = [
@@ -11,11 +11,11 @@ const routes = [
       import(/* webpackChunkName: "home" */ "../views/HomeView.vue"),
   },
   {
-    path: "/events",
-    name: "events",
+    path: "/activities",
+    name: "activities",
     component: () =>
-      import(/* webpackChunkName: "events" */ "../views/EventView.vue"),
-    props: { events: events, config: config },
+      import(/* webpackChunkName: "activities" */ "../views/ActivityView.vue"),
+    props: { activities: activities, config: config },
     meta: { requiresAuth: true },
   },
   {

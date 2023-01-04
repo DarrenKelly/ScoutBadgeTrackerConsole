@@ -1,11 +1,11 @@
 <template>
-  <button class="imgbutton" @click="trashEvent()">
+  <button class="imgbutton" @click="trashactivity()">
     <img
       src="@/assets/Trash.png"
       :class="[allowDelete ? 'icon' : 'gone', 'trash']"
     />
   </button>
-  <form @submit.prevent="onSubmit" class="add-event-form">
+  <form @submit.prevent="onSubmit" class="add-activity-form">
     <div class="form-control">
       <div class="typetable">
         <div>
@@ -62,12 +62,12 @@
         </div>
       </div>
       <div class="form-control">
-        <label>Event Name</label>
+        <label>activity Name</label>
         <input
           type="text"
           v-model="name"
           name="name"
-          placeholder="Event Name"
+          placeholder="activity Name"
         />
       </div>
       <div class="form-control">
@@ -121,13 +121,13 @@
       </div>
     </div>
 
-    <input type="submit" value="Save Event" class="btn btn-block" />
+    <input type="submit" value="Save activity" class="btn btn-block" />
   </form>
 </template>
 
 <script>
 export default {
-  name: "EventForm",
+  name: "activityForm",
   data() {
     return {
       name: "",
@@ -143,18 +143,18 @@ export default {
     prefill: Object,
     allowDelete: Boolean,
   },
-  emits: ["update-event", "delete-event"],
+  emits: ["update-activity", "delete-activity"],
   methods: {
     onSubmit() {
       if (!this.type) {
-        alert("Please select an event type");
+        alert("Please select an activity type");
         return;
       }
       if (!this.name) {
-        alert("Please add an event name");
+        alert("Please add an activity name");
         return;
       }
-      const newEvent = {
+      const newactivity = {
         id: this.id,
         type: this.type,
         name: this.name,
@@ -164,8 +164,8 @@ export default {
         hikeKms: this.hikeKms,
         note: this.note,
       };
-      console.log("AddEvent.vue emitting update-event");
-      this.$emit("update-event", newEvent);
+      console.log("Addactivity.vue emitting update-activity");
+      this.$emit("update-activity", newactivity);
       this.type = "";
       this.name = "";
       this.date = "";
@@ -174,15 +174,15 @@ export default {
       this.hikeKms = "";
       this.note = "";
     },
-    trashEvent() {
-      console.log("EventForm trashEvent()");
+    trashactivity() {
+      console.log("activityForm trashactivity()");
       if (confirm("Are you sure?")) {
-        this.$emit("delete-event", this.id);
+        this.$emit("delete-activity", this.id);
       }
     },
   },
   created() {
-    console.log("EventForm created()");
+    console.log("activityForm created()");
     this.id = this.prefill.id;
     this.type = this.prefill.type;
     this.name = this.prefill.name;
@@ -197,7 +197,7 @@ export default {
 </script>
 
 <style scoped>
-.add-event-form {
+.add-activity-form {
   margin-bottom: 20px;
 }
 .form-control {

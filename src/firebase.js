@@ -12,31 +12,31 @@ import {
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FireAuth, FireDB } from "./firebaseInit";
 
-const FB_EVENT_KEY = "/group/2ndGordon/section/cubs/events";
+const FB_ACTIVITY_KEY = "/group/2ndGordon/section/cubs/activities";
 const FB_MEMBER_KEY = "/group/2ndGordon/members";
 const FB_CONFIG_KEY = "/group/2ndGordon/config";
 
-const events = [];
+const activities = [];
 const members = [];
-let config = { hideOldEvents: false, hideArchivedMembers: false };
+let config = { hideOldActivities: false, hideArchivedMembers: false };
 let user = null;
 
 export {
   googlePopupLogin,
   writeMember,
   deleteMember,
-  writeEvent,
-  deleteEvent,
+  writeActivity,
+  deleteActivity,
   initialise,
   setUser,
   getUser,
   members,
-  events,
+  activities,
   config,
 };
 
 //For testing only @todo remove later
-export { FB_MEMBER_KEY, FB_EVENT_KEY, FB_CONFIG_KEY };
+export { FB_MEMBER_KEY, FB_ACTIVITY_KEY, FB_CONFIG_KEY };
 
 function setUser(newUser) {
   user = newUser;
@@ -68,9 +68,9 @@ function googlePopupLogin() {
     });
 }
 
-function removeUndefined(event) {
+function removeUndefined(activity) {
   let obj = {};
-  for (const [key, value] of Object.entries(event)) {
+  for (const [key, value] of Object.entries(activity)) {
     if (value != null) {
       obj[key] = value;
     }
@@ -79,7 +79,7 @@ function removeUndefined(event) {
 }
 
 async function initialise(user) {
-  initialiseEvents();
+  initialiseActivities();
   initialiseMembers();
   initialiseConfig(user);
 }
@@ -111,31 +111,31 @@ async function writeMember(member) {
   return member.id;
 }
 
-async function writeEvent(event) {
-  if (event.id == null) {
-    // This is a new event
+async function writeActivity(activity) {
+  if (activity.id == null) {
+    // This is a new activity
     try {
-      const newEventRef = await addDoc(
-        collection(FireDB.getInstance(), FB_EVENT_KEY),
-        event
+      const newActivityRef = await addDoc(
+        collection(FireDB.getInstance(), FB_ACTIVITY_KEY),
+        activity
       );
-      console.log("Event saved newEventRef=" + newEventRef.id);
-      event.id = newEventRef.id;
+      console.log("Activity saved newActivityRef=" + newActivityRef.id);
+      activity.id = newActivityRef.id;
     } catch (error) {
-      alert("Unable to save the new event. " + error);
+      alert("Unable to save the new activity. " + error);
     }
   } else {
     try {
       await setDoc(
-        doc(FireDB.getInstance(), FB_EVENT_KEY, event.id),
-        removeUndefined(event)
+        doc(FireDB.getInstance(), FB_ACTIVITY_KEY, activity.id),
+        removeUndefined(activity)
       );
-      console.log("Event updated");
+      console.log("Activity updated");
     } catch (error) {
-      alert("Unable to update the event. " + error);
+      alert("Unable to update the activity. " + error);
     }
   }
-  return event.id;
+  return activity.id;
 }
 
 async function deleteMember(memberId) {
@@ -146,11 +146,11 @@ async function deleteMember(memberId) {
   }
 }
 
-async function deleteEvent(eventId) {
+async function deleteActivity(activityId) {
   try {
-    await deleteDoc(doc(FireDB.getInstance(), FB_EVENT_KEY, eventId));
+    await deleteDoc(doc(FireDB.getInstance(), FB_ACTIVITY_KEY, activityId));
   } catch (error) {
-    alert("Unable to delete the event. " + error);
+    alert("Unable to delete the activity. " + error);
   }
 }
 
@@ -164,7 +164,7 @@ async function initialiseConfig(user) {
       config = {
         id: doc.id,
         name: doc.data().id,
-        hideOldEvents: doc.data().hideOldEvents,
+        hideOldActivities: doc.data().hideOldActivities,
         hideArchivedMembers: doc.data().hideArchivedMembers,
       };
     }
@@ -173,19 +173,19 @@ async function initialiseConfig(user) {
   return config;
 }
 
-// We don't ewant to load  events looking back to all time.
-// Use this constant to define how many months of old events
+// We don't ewant to load  activities looking back to all time.
+// Use this constant to define how many months of old activities
 // the app should load by default.
 const DEFAULT_LOOKBACK_MONTHS = 12;
 
-async function initialiseEvents() {
+async function initialiseActivities() {
   let lookbackDate = new Date();
   lookbackDate.setMonth(lookbackDate.getMonth() - DEFAULT_LOOKBACK_MONTHS);
 
   let lookbackStr = lookbackDate.toISOString().split("T")[0];
 
   const q = query(
-    collection(FireDB.getInstance(), FB_EVENT_KEY),
+    collection(FireDB.getInstance(), FB_ACTIVITY_KEY),
     where("date", ">=", lookbackStr)
   );
 
@@ -193,9 +193,9 @@ async function initialiseEvents() {
     console.log("Error returned by server:" + err);
   });
 
-  events.length = 0;
+  activities.length = 0;
   querySnapshot.forEach((doc) => {
-    let newEvent = {
+    let newActivity = {
       id: doc.id,
       name: doc.data().name,
       type: doc.data().type,
@@ -207,12 +207,12 @@ async function initialiseEvents() {
       note: doc.data().note,
       participants: doc.data().participants,
     };
-    events.push(newEvent);
+    activities.push(newActivity);
   });
 
-  events.sort(compare);
+  activities.sort(compare);
 
-  return events;
+  return activities;
 }
 
 function getISODate(inDate) {
