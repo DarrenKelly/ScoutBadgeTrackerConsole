@@ -1,5 +1,5 @@
 <template>
-  <div v-for="activity in activitys" :key="activity.id">
+  <div v-for="activity in activities" :key="activity.id">
     <ScoutActivity
       @update-activity="updateActivity"
       @delete-activity="deleteActivity"
@@ -11,7 +11,7 @@
       v-if="
         selectedId == activity.id ||
         (selectedId == '' &&
-          (!hideOldactivitys ||
+          (!hideOldActivities ||
             activity.date >= new Date().toISOString().split('T')[0]))
       "
     />
@@ -24,9 +24,9 @@ import ScoutActivity from "./ScoutActivity";
 export default {
   name: "activityList",
   props: {
-    activitys: Array,
+    activities: Array,
     selectedId: String,
-    hideOldactivitys: Boolean,
+    hideOldActivities: Boolean,
     allowEdit: Boolean,
   },
   components: {
