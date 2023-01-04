@@ -61,7 +61,7 @@ export default {
       this.selectedEventId = eventId;
       let event = events.find((a) => a.id == eventId);
 
-      if ("participants" in event) {
+      if ("participants" in event && event.participants != null) {
         this.participants = event.participants;
       } else {
         this.participants = [];
@@ -98,12 +98,16 @@ export default {
       console.log(
         "RollView changeParticipation( " + memberId + ", " + state + " )"
       );
+      console.log("this.participants = " + this.participants);
       let participant = this.participants.find((a) => a.id == memberId);
+      console.log("RollView changeParticipation participant = " + participant);
       if (participant == null) {
         participant = { id: memberId, role: state };
+        console.log("New participant = " + participant);
         this.participants.push(participant);
       } else {
         participant.role = state;
+        console.log("New participant role " + participant);
       }
     },
   },

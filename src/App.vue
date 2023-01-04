@@ -40,7 +40,7 @@ body {
   margin: 15px auto;
   overflow: auto;
   min-height: 300px;
-  border: 1px solid steelblue;
+  border: 1px solid #622599;
   padding: 20px;
   border-radius: 5px;
 }
