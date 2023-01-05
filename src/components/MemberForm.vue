@@ -266,4 +266,7 @@ export default {
   width: 48px;
   float: right;
 }
+ul li::marker {
+  content: "";
+}
 </style>
