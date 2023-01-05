@@ -42,7 +42,7 @@ export default {
     return {
       activitiesData: activities,
       selectedId: null,
-      hideOldactivities: true,
+      hideOldActivities: true,
       showForm: false,
       prefill: {
         id: null,
