@@ -39,9 +39,9 @@ export default {
     "select-activity",
   ],
   methods: {
-    updateActivity(modifiedactivity) {
-      console.log("activityList updateActivity with Id " + modifiedactivity.id);
-      this.$emit("update-activity", modifiedactivity);
+    updateActivity(modifiedActivity) {
+      console.log("activityList updateActivity with Id " + modifiedActivity.id);
+      this.$emit("update-activity", modifiedActivity);
     },
     deleteActivity(activityId) {
       console.log("activityList deleteActivity with Id " + activityId);
@@ -79,7 +79,6 @@ export default {
   },
   beforeUpdate() {
     console.log("activityList beforeUpdate()");
-    console.log("activitys=" + this.activitys);
   },
   unpdate() {
     console.log("activityList unpdate()");

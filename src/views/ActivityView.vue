@@ -1,5 +1,5 @@
 <template>
-  <div class="activitys">
+  <div class="activities">
     <ActivitiesHeader
       @show-add-activity-form="toggleAddActivityForm"
       @filter-old-activities="filterOldActivities"
@@ -17,7 +17,7 @@
     <ActivityList
       @update-activity="modifyActivity"
       @delete-activity="removeActivity"
-      :activitys="activitysdata"
+      :activities="activitiesData"
       :allowEdit="true"
       :hideOldActivities="hideOldActivities"
       :selectedId="''"
@@ -40,9 +40,9 @@ export default {
   },
   data() {
     return {
-      activitysdata: activities,
+      activitiesData: activities,
       selectedId: null,
-      hideOldactivitys: true,
+      hideOldactivities: true,
       showForm: false,
       prefill: {
         id: null,
@@ -57,10 +57,10 @@ export default {
     };
   },
   methods: {
-    onAddActivity(newactivity) {
+    onAddActivity(newActivity) {
       console.log("activityView onAddActivity()");
-      writeActivity(newactivity);
-      this.activitysdata.push(newactivity);
+      writeActivity(newActivity);
+      this.activitiesData.push(newActivity);
       this.showForm = false;
     },
     modifyActivity(modifiedActivity) {
@@ -85,9 +85,9 @@ export default {
     removeActivity(activityId) {
       console.log("activityView deleteActivity()");
 
-      const found = this.activitysdata.find((el) => el.id == activityId);
-      const index = this.activitysdata.indexOf(found);
-      this.activitysdata.splice(index, 1);
+      const found = this.activitiesData.find((el) => el.id == activityId);
+      const index = this.activitiesData.indexOf(found);
+      this.activitiesData.splice(index, 1);
 
       deleteActivity(activityId);
     },
