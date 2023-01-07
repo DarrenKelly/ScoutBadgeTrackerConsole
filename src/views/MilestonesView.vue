@@ -54,8 +54,15 @@
             v-for="(value, index) in getMilestoneRow(scout)"
             :key="index"
             :class="[
-              value == goalValues[index]
+              value == goalValues[index] &&
+              mileStoneChallengesMet(
+                scout,
+                ['Participate', 'Assist', 'Lead'][index % 3],
+                Math.floor(index / 3) + 1
+              )
                 ? 'count-cell-success'
+                : value == goalValues[index]
+                ? 'count-cell-challenge'
                 : value == 0
                 ? 'count-cell-not-started'
                 : 'count-cell-wip',
@@ -121,11 +128,20 @@ td {
   background: #eee;
   color: black;
 }
+.count-cell-challenge {
+  background: rgb(253, 153, 2);
+  color: black;
+}
 </style>
 
 <script>
 import { ref, computed } from "vue";
 import { members, activities } from "@/firebase";
+import {
+  milestoneParticipate,
+  milestoneAssist,
+  milestoneLead,
+} from "@/milestoneRules";
 
 export default {
   name: "MilestonesView",
@@ -156,7 +172,7 @@ export default {
       scouts: members,
       goals: [
         {
-          participate: 6 * 4, // 6 activities from each of the 4 Challenge Areas
+          participate: 1, // 6 activities from each of the 4 Challenge Areas
           assist: 2,
           lead: 1,
         },
@@ -193,6 +209,34 @@ export default {
     },
   },
   methods: {
+    mileStoneChallengesMet(scout, type, milestone) {
+      console.log(
+        "mileStoneChallengesMet(" +
+          JSON.stringify(scout) +
+          "," +
+          type +
+          "," +
+          milestone +
+          ")"
+      );
+
+      switch (type) {
+        case "Participate":
+          return milestoneParticipate(scout, activities, 7 - milestone);
+
+        case "Assist":
+          return milestoneAssist(scout, activities, milestone + 1);
+
+        case "Lead":
+          if (milestone == 1) {
+            return milestoneLead(scout, activities, 1);
+          } else if (milestone == 2) {
+            return milestoneLead(scout, activities, 2);
+          }
+          return milestoneLead(scout, activities, 4);
+      }
+      return false;
+    },
     getMilestoneRow: function (scout) {
       var participations = 0;
       var assists = 0;
@@ -220,15 +264,6 @@ export default {
 
       let retVal = [];
       for (let milestone = 0; milestone < 3; milestone++) {
-        console.log(
-          "For milestone " +
-            (milestone + 1) +
-            " " +
-            scout.givenname +
-            " has " +
-            leads +
-            " leads."
-        );
         if (
           participations <= this.goals[milestone].participate ||
           milestone == 2
