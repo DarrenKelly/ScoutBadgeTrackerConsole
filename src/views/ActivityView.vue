@@ -9,7 +9,7 @@
     />
     <div v-if="showForm">
       <ActivityForm
-        @update-activity="addNewActivity"
+        @update-activity="onAddActivity"
         :allow-delete="false"
         :prefill="prefill"
       />
@@ -53,6 +53,8 @@ export default {
         duration: null,
         hikeKms: null,
         note: null,
+        participants: [],
+        iCans: [],
       },
     };
   },
@@ -79,6 +81,7 @@ export default {
       found.theme = modifiedActivity.theme;
       found.note = modifiedActivity.note;
       found.participants = modifiedActivity.participants;
+      found.iCans = modifiedActivity.iCans;
 
       writeActivity(modifiedActivity);
     },

@@ -1,133 +1,157 @@
 <template>
-  <button class="imgbutton" @click="trashactivity()">
+  <button class="imgbutton" @click="trashActivity()">
     <img
       src="@/assets/Trash.png"
       :class="[allowDelete ? 'icon' : 'gone', 'trash']"
     />
   </button>
   <form @submit.prevent="onSubmit" class="add-activity-form">
-    <div class="form-control">
-      <div class="typetable">
-        <div>
-          <label>Type</label>
-          <select name="type" v-model="type">
-            <option value="Regular Meet">Regular Meet</option>
-            <option value="Camp">Camp</option>
-            <option value="Hike">Hike</option>
-            <option value="Overnight Hike">Overnight Hike</option>
-            <option value="Grey Wolf Hike">Grey Wolf Hike</option>
-            <option value="Water Skills">Water Skills</option>
-            <option value="Canoeing">Canoeing</option>
-            <option value="Flying Day">Flying Day</option>
-          </select>
-        </div>
-        <div></div>
-        <div>
-          <img
-            src="@/assets/Water.png"
-            :class="[
-              type && (type.includes('Water') || type.includes('Canoe'))
-                ? 'icon'
-                : 'gone',
-            ]"
-          />
-          <img
-            src="@/assets/Canoe.png"
-            :class="[type && type.includes('Canoe') ? 'icon' : 'gone']"
-          />
-          <img
-            src="@/assets/GreyWolf.png"
-            :class="[type && type.includes('Wolf') ? 'icon' : 'gone']"
-          />
-          <img
-            src="@/assets/CampFire.png"
-            :class="[
-              type && (type.includes('Camp') || type.includes('Overnight'))
-                ? 'icon'
-                : 'gone',
-            ]"
-          />
-          <img
-            src="@/assets/Hike.png"
-            :class="[type && type.includes('Hike') ? 'icon' : 'gone']"
-          />
-          <img
-            src="@/assets/Plane.png"
-            :class="[type && type.includes('Fly') ? 'icon' : 'gone']"
-          />
-          <img
-            src="@/assets/Fishing.png"
-            :class="[type && type.includes('Fish') ? 'icon' : 'gone']"
-          />
-        </div>
+    <div class="typetable">
+      <div>
+        <label>Type</label>
+        <select name="type" v-model="type" style="width: 235px">
+          <option
+            v-for="(option, index) in this.activityOptions"
+            v-bind:value="option"
+            v-bind:key="index"
+          >
+            {{ option }}
+          </option>
+        </select>
       </div>
-      <div class="form-control">
-        <label>activity Name</label>
-        <input
-          type="text"
-          v-model="name"
-          name="name"
-          placeholder="activity Name"
+      <div></div>
+      <div>
+        <img
+          src="@/assets/Water.png"
+          :class="[
+            type && (type.includes('Water') || type.includes('Canoe'))
+              ? 'icon'
+              : 'gone',
+          ]"
         />
-      </div>
-      <div class="form-control">
-        <label>Day</label>
-        <input
-          type="date"
-          v-model="date"
-          name="date"
-          placeholder="YYYY-MM-DD"
+        <img
+          src="@/assets/Canoe.png"
+          :class="[type && type.includes('Canoe') ? 'icon' : 'gone']"
         />
-      </div>
-      <div class="form-control">
-        <label>Location</label>
-        <input
-          type="text"
-          v-model="location"
-          name="location"
-          placeholder="Location"
+        <img
+          src="@/assets/GreyWolf.png"
+          :class="[type && type.includes('Wolf') ? 'icon' : 'gone']"
         />
-      </div>
-      <div class="form-control">
-        <label>Duration</label>
-        <input
-          type="text"
-          v-model="duration"
-          name="duration"
-          placeholder="# Hrs/Days"
+        <img
+          src="@/assets/CampFire.png"
+          :class="[
+            type && (type.includes('Camp') || type.includes('Overnight'))
+              ? 'icon'
+              : 'gone',
+          ]"
         />
-      </div>
-      <div :class="[type && type.includes('Hike') ? 'form-control' : 'gone']">
-        <label>Hike Distance</label>
-        <input
-          type="text"
-          v-model="hikeKms"
-          name="Hiked Kms"
-          placeholder="# Kms"
+        <img
+          src="@/assets/Hike.png"
+          :class="[type && type.includes('Hike') ? 'icon' : 'gone']"
         />
-      </div>
-      <div class="form-control">
-        <label>Theme</label>
-        <input type="text" v-model="theme" name="theme" placeholder="" />
-      </div>
-      <div class="form-control">
-        <label>Note</label>
-        <input
-          type="text"
-          v-model="note"
-          name="note"
-          placeholder="Eg. Leader?"
+        <img
+          src="@/assets/Plane.png"
+          :class="[type && type.includes('Fly') ? 'icon' : 'gone']"
+        />
+        <img
+          src="@/assets/Fishing.png"
+          :class="[type && type.includes('Fish') ? 'icon' : 'gone']"
         />
       </div>
     </div>
-
+    <div class="form-control">
+      <label>Challenge Type</label>
+      <select name="challenge" v-model="challengeType">
+        <option
+          v-for="(option, index) in this.challengeOptions"
+          v-bind:value="option"
+          v-bind:key="index"
+        >
+          {{ option }}
+        </option>
+      </select>
+    </div>
+    <div class="form-control">
+      <label>activity Name</label>
+      <input
+        type="text"
+        v-model="name"
+        name="name"
+        placeholder="activity Name"
+      />
+    </div>
+    <div class="form-control">
+      <label>Day</label>
+      <input type="date" v-model="date" name="date" placeholder="YYYY-MM-DD" />
+    </div>
+    <div class="form-control">
+      <label>Location</label>
+      <input
+        type="text"
+        v-model="location"
+        name="location"
+        placeholder="Location"
+      />
+    </div>
+    <div class="form-control">
+      <label>Duration</label>
+      <input
+        type="text"
+        v-model="duration"
+        name="duration"
+        placeholder="# Hrs/Days"
+      />
+    </div>
+    <div :class="[type && type.includes('Hike') ? 'form-control' : 'gone']">
+      <label>Hike Distance</label>
+      <input
+        type="text"
+        v-model="hikeKms"
+        name="Hiked Kms"
+        placeholder="# Kms"
+      />
+    </div>
+    <div class="form-control">
+      <label>Theme</label>
+      <input type="text" v-model="theme" name="theme" placeholder="" />
+    </div>
+    <div class="form-control">
+      <label>Note</label>
+      <input type="text" v-model="note" name="note" placeholder="Eg. Leader?" />
+    </div>
     <input type="submit" value="Save activity" class="btn btn-block" />
+
+    <CollapsableOptionSet
+      v-for="(oas, index) in oasOptions"
+      :key="index"
+      :sectionTitle="oas.area + ' ' + oas.stage"
+      :labelset="oas.requirements"
+      @update="(list) => onUpdate(index, list)"
+    />
   </form>
 </template>
 
 <script>
+import { activityTypes, challengeTypes, oasStatements } from "@/scouting.js";
+import CollapsableOptionSet from "@/components/CollapsableOptionSet.vue";
+
+function concatenateAll(arrayArray) {
+  let retVal = new Array();
+  arrayArray.forEach((array) => {
+    array.forEach((el) => {
+      if (!retVal.includes(el)) {
+        retVal.push(el);
+      }
+    });
+  });
+  return retVal;
+}
+
 export default {
-  name: "activityForm",
+  name: "ActivityForm",
+  components: {
+    CollapsableOptionSet,
+  },
   data() {
     return {
       name: "",
@@ -135,8 +159,13 @@ export default {
       location: "",
       duration: "",
       type: "",
+      challengeType: "",
       hikeKms: "",
       note: "",
+      activityOptions: activityTypes,
+      challengeOptions: challengeTypes,
+      oasOptions: oasStatements,
+      selectedICanStatements: [],
     };
   },
   props: {
@@ -144,6 +173,7 @@ export default {
     allowDelete: Boolean,
   },
   emits: ["update-activity", "delete-activity"],
+
   methods: {
     onSubmit() {
       if (!this.type) {
@@ -154,37 +184,50 @@ export default {
         alert("Please add an activity name");
         return;
       }
-      const newactivity = {
+      const newActivity = {
         id: this.id,
         type: this.type,
+        challengeType: this.challengeType,
         name: this.name,
         date: this.date,
         location: this.location,
         duration: this.duration,
         hikeKms: this.hikeKms,
         note: this.note,
+        iCan: concatenateAll(this.selectedICanStatements),
       };
-      console.log("Addactivity.vue emitting update-activity");
-      this.$emit("update-activity", newactivity);
+      console.log("AddActivity.vue emitting update-activity");
+      console.log("AddActivity " + JSON.stringify(newActivity));
+      this.$emit("update-activity", newActivity);
       this.type = "";
+      this.challengeType = "";
       this.name = "";
       this.date = "";
       this.location = "";
       this.duration = "";
       this.hikeKms = "";
       this.note = "";
+      this.iCan = [];
     },
-    trashactivity() {
-      console.log("activityForm trashactivity()");
+    trashActivity() {
+      console.log("ActivityForm trashActivity()");
       if (confirm("Are you sure?")) {
         this.$emit("delete-activity", this.id);
       }
     },
+    onUpdate(index, textList) {
+      this.selectedICanStatements[index] = textList;
+    },
   },
   created() {
-    console.log("activityForm created()");
+    console.log("ActivityForm created()");
+    this.oasOptions.forEach(() => {
+      this.selectedICanStatements.push([]);
+    });
+
     this.id = this.prefill.id;
     this.type = this.prefill.type;
+    this.challengeType = this.prefill.challengeType;
     this.name = this.prefill.name;
     this.date = this.prefill.date;
     this.location = this.prefill.location;
@@ -192,6 +235,8 @@ export default {
     this.hikeKms = this.prefill.hikeKms;
     this.theme = this.prefill.theme;
     this.note = this.prefill.note;
+
+    oasStatements;
   },
 };
 </script>
@@ -200,19 +245,31 @@ export default {
 .add-activity-form {
   margin-bottom: 20px;
 }
+
 .form-control {
-  margin: 20px 0;
+  margin: 20px 25px 0 0;
 }
+
 .form-control label {
   display: block;
 }
-.form-control input {
-  width: 100%;
-  height: 20px;
-  margin: 5px;
-  padding: 3px 7px;
+
+.form-control select {
+  width: 30%;
+  height: 50px;
+  margin: 10px 0 0 0;
+  padding: 10px 7px;
   font-size: 17px;
 }
+
+.form-control input {
+  width: 100%;
+  height: 40px;
+  margin: 10px;
+  padding: 10px 7px;
+  font-size: 17px;
+}
+
 .two-elements {
   display: grid;
   width: 100%;
@@ -221,16 +278,20 @@ export default {
 
 .typetable {
   display: grid;
-  grid-template-columns: 100px 25px auto;
+  grid-template-columns: 250px 25px auto;
 }
+
 .icon {
   width: 45px;
+  margin-top: 35px;
   margin-left: 5px;
   height: auto;
 }
+
 .gone {
   display: none;
 }
+
 .trash {
   display: block;
   height: 48px;
@@ -238,6 +299,7 @@ export default {
   padding: 0;
   margin: 0;
 }
+
 .imgbutton {
   padding: 0px;
   margin: 0px;

@@ -1,15 +1,15 @@
 <template>
   <header>
-    <h1>Events</h1>
+    <h1>Activities</h1>
     <StyledButton
       v-if="allowAdd"
       @clicked="onFormButtonClicked"
-      :button_text="showForm ? 'Cancel' : 'Add Event'"
+      :button_text="showForm ? 'Cancel' : 'Add Activity'"
       :colour="showForm ? 'red' : 'green'"
     />
     <StyledButton
       @clicked="onFilterButtonClicked"
-      :button_text="hideOldEvents ? 'Show Old' : 'Hide Old'"
+      :button_text="hideOldActivities ? 'Show Old' : 'Hide Old'"
       colour="blue"
     />
   </header>
@@ -18,23 +18,23 @@
 <script>
 import StyledButton from "./StyledButton";
 export default {
-  name: "EventsHeader",
+  name: "ActivitiesHeader",
   components: {
     StyledButton,
   },
   props: {
-    hideOldEvents: Boolean,
+    hideOldActivities: Boolean,
     showForm: Boolean,
     allowAdd: Boolean,
   },
-  emits: ["show-add-event-form", "filter-old-events"],
+  emits: ["show-add-activity-form", "filter-old-activities"],
   methods: {
     onFormButtonClicked() {
       console.log("showForm=" + this.showForm);
-      this.$emit("show-add-event-form");
+      this.$emit("show-add-activity-form");
     },
     onFilterButtonClicked() {
-      this.$emit("filter-old-events");
+      this.$emit("filter-old-activities");
     },
   },
 };
