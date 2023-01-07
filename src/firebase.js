@@ -206,6 +206,7 @@ async function initialiseActivities() {
       theme: doc.data().theme,
       note: doc.data().note,
       participants: doc.data().participants,
+      iCan: doc.data().iCan,
     };
     activities.push(newActivity);
   });

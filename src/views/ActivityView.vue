@@ -7,13 +7,6 @@
       :allowAdd="true"
       :hideOldActivities="hideOldActivities"
     />
-    <div v-if="showForm">
-      <ActivityForm
-        @update-activity="onAddActivity"
-        :allow-delete="false"
-        :prefill="prefill"
-      />
-    </div>
     <ActivityList
       @update-activity="modifyActivity"
       @delete-activity="removeActivity"
@@ -28,7 +21,6 @@
 <script>
 import ActivitiesHeader from "@/components/ActivitiesHeader";
 import ActivityList from "@/components/ActivityList";
-import ActivityForm from "@/components/ActivityForm.vue";
 import { activities, writeActivity, deleteActivity } from "@/firebase";
 
 export default {
@@ -36,7 +28,6 @@ export default {
   components: {
     ActivitiesHeader,
     ActivityList,
-    ActivityForm,
   },
   data() {
     return {
@@ -44,18 +35,6 @@ export default {
       selectedId: null,
       hideOldActivities: true,
       showForm: false,
-      prefill: {
-        id: null,
-        type: null,
-        name: null,
-        date: null,
-        location: null,
-        duration: null,
-        hikeKms: null,
-        note: null,
-        participants: [],
-        iCans: [],
-      },
     };
   },
   methods: {

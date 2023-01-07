@@ -64,6 +64,7 @@ export default {
   },
   created() {
     console.log("activityList created()");
+    console.log("activities = " + JSON.stringify(this.activities));
   },
   beforeMount() {
     console.log("activityList beforeMount()");

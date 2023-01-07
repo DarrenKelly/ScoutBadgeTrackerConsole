@@ -7,9 +7,9 @@
   </button>
   <form @submit.prevent="onSubmit" class="add-activity-form">
     <div class="typetable">
-      <div>
+      <div class="form-control">
         <label>Type</label>
-        <select name="type" v-model="type" style="width: 235px">
+        <select name="type" v-model="type" class="dropdown">
           <option
             v-for="(option, index) in this.activityOptions"
             v-bind:value="option"
@@ -19,8 +19,7 @@
           </option>
         </select>
       </div>
-      <div></div>
-      <div>
+      <div class="img-container">
         <img
           src="@/assets/Water.png"
           :class="[
@@ -61,7 +60,7 @@
     </div>
     <div class="form-control">
       <label>Challenge Type</label>
-      <select name="challenge" v-model="challengeType">
+      <select name="challenge" v-model="challengeType" class="dropdown">
         <option
           v-for="(option, index) in this.challengeOptions"
           v-bind:value="option"
@@ -94,7 +93,7 @@
       />
     </div>
     <div class="form-control">
-      <label>Duration</label>
+      <label>Duration {{ duration }}</label>
       <input
         type="text"
         v-model="duration"
@@ -126,6 +125,7 @@
       :key="index"
       :sectionTitle="oas.area + ' ' + oas.stage"
       :labelset="oas.requirements"
+      :selected="iCan"
       @update="(list) => onUpdate(index, list)"
     />
   </form>
@@ -162,10 +162,19 @@ export default {
       challengeType: "",
       hikeKms: "",
       note: "",
+
+      // Need to return the full list of "I can ..."
+      // statements as as simple array.
+      // However, as they are segmented into sections
+      // for display purposes, we also need to track
+      // them by the CollapsableOptionSet that groups
+      // a subset of the statemets.
+      iCan: [], // unified list of statements
+      selectedICanStatements: [], // grouped by area
+
       activityOptions: activityTypes,
       challengeOptions: challengeTypes,
       oasOptions: oasStatements,
-      selectedICanStatements: [],
     };
   },
   props: {
@@ -235,6 +244,7 @@ export default {
     this.hikeKms = this.prefill.hikeKms;
     this.theme = this.prefill.theme;
     this.note = this.prefill.note;
+    this.iCan = this.prefill.iCan;
 
     oasStatements;
   },
@@ -251,11 +261,10 @@ export default {
 }
 
 .form-control label {
-  display: block;
+  display: flex;
 }
 
 .form-control select {
-  width: 30%;
   height: 50px;
   margin: 10px 0 0 0;
   padding: 10px 7px;
@@ -268,6 +277,11 @@ export default {
   margin: 10px;
   padding: 10px 7px;
   font-size: 17px;
+}
+
+.dropdown {
+  width: 235px;
+  height: 30px;
 }
 
 .two-elements {
@@ -285,7 +299,7 @@ export default {
   width: 45px;
   margin-top: 35px;
   margin-left: 5px;
-  height: auto;
+  height: 45px;
 }
 
 .gone {
@@ -309,5 +323,9 @@ export default {
   height: 48px;
   width: 48px;
   float: right;
+}
+
+.img-container {
+  display: flex;
 }
 </style>

@@ -9,7 +9,7 @@
         <li v-for="(label, index) in set.statements" :key="index">
           <ToggleSwitch
             class="switch"
-            :checked="false"
+            :checked="this.selected.includes(label)"
             :labelText="label"
             @unchecked="removeText"
             @checked="addText"
@@ -35,6 +35,7 @@ export default {
   props: {
     sectionTitle: String,
     labelset: { type: Array, required: true },
+    selected: { type: Array, required: true },
   },
   emits: ["update"],
   methods: {
@@ -60,6 +61,7 @@ export default {
   },
   created() {
     console.log("CollapsableOptionSet created()");
+    this.selectedStatements = this.selected;
   },
 };
 </script>
