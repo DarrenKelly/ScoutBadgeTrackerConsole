@@ -1,4 +1,4 @@
-export { oasStatements, challengeTypes, activityTypes };
+export { oasStatements, challengeTypes, activityTypes, allOasStatements };
 
 const activityTypes = [
   "Regular Meet",
@@ -574,3 +574,13 @@ const oasStatements = [
     ],
   },
 ];
+
+const allOasStatements = (function () {
+  let retVal = [];
+  oasStatements.forEach((el) => {
+    el.requirements.forEach((req) => {
+      retVal = retVal.concat(req.statements);
+    });
+  });
+  return retVal;
+})();

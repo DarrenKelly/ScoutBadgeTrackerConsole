@@ -45,7 +45,9 @@ export default {
       this.showForm = false;
     },
     modifyActivity(modifiedActivity) {
-      console.log("activityView modifyActivity()");
+      console.log(
+        "activityView modifyActivity() " + JSON.stringify(modifiedActivity)
+      );
 
       const found = this.activitiesData.find(
         (el) => el.id == modifiedActivity.id

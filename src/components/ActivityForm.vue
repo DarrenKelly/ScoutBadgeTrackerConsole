@@ -162,6 +162,7 @@ export default {
       challengeType: "",
       hikeKms: "",
       note: "",
+      participants: [],
 
       // Need to return the full list of "I can ..."
       // statements as as simple array.
@@ -203,6 +204,7 @@ export default {
         duration: this.duration,
         hikeKms: this.hikeKms,
         note: this.note,
+        participants: this.participants,
         iCan: concatenateAll(this.selectedICanStatements),
       };
       console.log("AddActivity.vue emitting update-activity");
@@ -216,6 +218,7 @@ export default {
       this.duration = "";
       this.hikeKms = "";
       this.note = "";
+      this.participants = [];
       this.iCan = [];
     },
     trashActivity() {
@@ -244,6 +247,7 @@ export default {
     this.hikeKms = this.prefill.hikeKms;
     this.theme = this.prefill.theme;
     this.note = this.prefill.note;
+    this.participants = this.prefill.participants;
     this.iCan = this.prefill.iCan;
 
     oasStatements;
