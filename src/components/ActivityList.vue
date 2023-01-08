@@ -10,9 +10,7 @@
       :allowEdit="allowEdit"
       v-if="
         selectedId == activity.id ||
-        (selectedId == '' &&
-          (!hideOldActivities ||
-            activity.date >= new Date().toISOString().split('T')[0]))
+        (selectedId == '' && (!hideOldActivities || isNotOld(activity.date)))
       "
     />
   </div>
@@ -39,6 +37,14 @@ export default {
     "select-activity",
   ],
   methods: {
+    isNotOld(d) {
+      // We're often interested in recent activites
+      // multi-day activities may not even be finished.
+      let today = new Date();
+      let lastInterestingDay = new Date();
+      lastInterestingDay.setDate(today.getDate - 5);
+      return d >= lastInterestingDay.toISOString().split("T")[0];
+    },
     updateActivity(modifiedActivity) {
       console.log("activityList updateActivity with Id " + modifiedActivity.id);
       this.$emit("update-activity", modifiedActivity);
