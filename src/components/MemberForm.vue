@@ -50,6 +50,14 @@
         @checked="entrial"
       />
     </div>
+    <div class="form-control">
+      <ToggleSwitch
+        :checked="greywolf"
+        :labelText="'Grey Wolf'"
+        @unchecked="unwolf"
+        @checked="enwolf"
+      />
+    </div>
 
     <div class="form-control">
       <label>Given Name</label>
@@ -70,9 +78,30 @@
       />
     </div>
     <div class="form-control">
+      <label>Legal Given Name</label>
+      <input
+        type="text"
+        v-model="legalname"
+        name="legalname"
+        placeholder="Legal Given Name"
+      />
+    </div>
+
+    <div class="form-control">
+      <label>Scout ID</label>
+      <input
+        type="text"
+        v-model="scoutid"
+        name="scoutid"
+        placeholder="Scout ID"
+      />
+    </div>
+
+    <div class="form-control">
       <label>Date of Birth</label>
       <input type="date" v-model="dob" name="dob" placeholder="YYYY-MM-DD" />
     </div>
+
     <div class="form-control">
       <label>Join Date</label>
       <input
@@ -82,6 +111,25 @@
         placeholder="YYYY-MM-DD"
       />
     </div>
+    <div class="form-control">
+      <label>Invest Date</label>
+      <input
+        type="date"
+        v-model="investdate"
+        name="investdate"
+        placeholder="YYYY-MM-DD"
+      />
+    </div>
+    <div class="form-control">
+      <label>Parent's Name</label>
+      <input
+        type="text"
+        v-model="parentname"
+        name="parentname"
+        placeholder="Parent's Name"
+      />
+    </div>
+
     <div class="form-control">
       <label>Contact Phone</label>
       <input
@@ -183,6 +231,12 @@ export default {
       if (confirm("Are you sure?")) {
         this.$emit("delete-member", this.id);
       }
+    },
+    unwolf() {
+      this.greywolf = false;
+    },
+    enwolf() {
+      this.greywolf = true;
     },
     untrial() {
       this.trial = false;

@@ -45,6 +45,11 @@ export default {
         id: null,
         givenname: null,
         familyname: null,
+        legalname: null,
+        parentname: null,
+        greywolf: null,
+        scoutid: null,
+        investdate: null,
         section: null,
         trial: null,
         archived: null,
@@ -83,6 +88,11 @@ export default {
 
       found.givenname = modifiedMember.givenname;
       found.familyname = modifiedMember.familyname;
+      found.legalname = modifiedMember.legalname;
+      found.parentname = modifiedMember.parentname;
+      found.greywolf = modifiedMember.greywolf;
+      found.scoutid = modifiedMember.scoutid;
+      found.investdate = modifiedMember.investdate;
       found.section = modifiedMember.section;
       found.trial = modifiedMember.trial;
       found.archived = modifiedMember.archived;

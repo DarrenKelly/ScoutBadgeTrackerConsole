@@ -48,7 +48,9 @@
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id">
           <td class="name-cell end-cell">
-            {{ scout.givenname }} {{ scout.familyname }}
+            {{ scout.givenname }}
+            <div v-if="member.legalname">'{{ member.legalname }}'</div>
+            {{ scout.familyname }}
           </td>
           <td
             v-for="(value, index) in getMilestoneRow(scout)"

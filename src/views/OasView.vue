@@ -42,7 +42,9 @@
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id" class="scout-row">
           <td class="name-cell end-cell">
-            {{ scout.givenname }} {{ scout.familyname }}
+            {{ scout.givenname }}
+            <div v-if="member.legalname">'{{ member.legalname }}'</div>
+            {{ scout.familyname }}
           </td>
           <td
             v-for="(value, index) in oasAchievementMap.get(scout.id)"
@@ -107,6 +109,17 @@ function allAchievements() {
   return retVal;
 }
 
+function filterScoutName(scout, filter) {
+  if (scout.legalname) {
+    return (scout.givenname + " " + scout.legalname + " " + scout.familyname)
+      .toLowerCase()
+      .includes(filter.toLowerCase());
+  }
+  return (scout.givenname + " " + scout.familyname)
+    .toLowerCase()
+    .includes(filter.toLowerCase());
+}
+
 export default {
   name: "OasView",
   setup() {
@@ -118,11 +131,7 @@ export default {
         return members;
       }
       console.log("Filter=" + filter);
-      return members.filter((scout) =>
-        (scout.givenname + " " + scout.familyname)
-          .toLowerCase()
-          .includes(filter.toLowerCase())
-      );
+      return members.filter((scout) => filterScoutName(scout, filter));
     });
     const oasAchievementMap = allAchievements();
     return {
