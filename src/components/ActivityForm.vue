@@ -2,7 +2,7 @@
   <button class="imgbutton" @click="trashActivity()">
     <img
       src="@/assets/Trash.png"
-      :class="[allowDelete ? 'icon' : 'gone', 'trash']"
+      :class="[allowDelete ? 'icon trash' : 'gone']"
     />
   </button>
   <form @submit.prevent="onSubmit" class="add-activity-form">
@@ -93,7 +93,7 @@
       />
     </div>
     <div class="form-control">
-      <label>Duration {{ duration }}</label>
+      <label>Duration</label>
       <input
         type="text"
         v-model="duration"

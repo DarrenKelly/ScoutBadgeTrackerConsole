@@ -71,11 +71,11 @@
       <i class="type">{{ activity.type }}</i>
     </div>
   </div>
-  <div v-if="showEditForm && allowEdit">
+  <div v-if="showEditForm">
     <ActivityForm
       @update-activity="updateActivity"
       @delete-activity="deleteActivity"
-      :allow-delete="true"
+      :allowDelete="true"
       :prefill="activity"
     />
   </div>
