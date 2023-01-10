@@ -239,7 +239,6 @@ async function initialiseMembers() {
       familyname: doc.data().familyname,
       section: doc.data().section,
       trial: doc.data().trial,
-      waitlist: doc.data().waitlist,
       archived: doc.data().archived,
       contactphone: doc.data().contactphone,
       contactemail: doc.data().contactemail,

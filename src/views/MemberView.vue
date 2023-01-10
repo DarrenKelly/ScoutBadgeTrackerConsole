@@ -47,7 +47,6 @@ export default {
         familyname: null,
         section: null,
         trial: null,
-        waitlist: null,
         archived: null,
         contactphone: null,
         contactemail: null,
@@ -86,7 +85,6 @@ export default {
       found.familyname = modifiedMember.familyname;
       found.section = modifiedMember.section;
       found.trial = modifiedMember.trial;
-      found.waitlist = modifiedMember.waitlist;
       found.archived = modifiedMember.archived;
       found.contactphone = modifiedMember.contactphone;
       found.contactemail = modifiedMember.contactemail;

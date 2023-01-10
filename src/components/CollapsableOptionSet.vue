@@ -8,7 +8,6 @@
       <ul class="togglelist">
         <li v-for="(label, index) in set.statements" :key="index">
           <ToggleSwitch
-            class="switch"
             :checked="this.selected.includes(label)"
             :labelText="label"
             @unchecked="removeText"

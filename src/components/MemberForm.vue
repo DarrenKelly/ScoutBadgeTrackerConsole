@@ -2,7 +2,7 @@
   <button class="imgbutton" @click="trashMember()">
     <img
       src="@/assets/Trash.png"
-      :class="[allowDelete ? 'icon' : 'gone', 'trash']"
+      :class="[allowDelete ? 'icon trash' : 'gone']"
     />
   </button>
   <form @submit.prevent="onSubmit" class="member-form">
@@ -34,27 +34,20 @@
     </div>
 
     <div class="form-control">
-      <label>Archived</label>
-      <input
-        type="checkbox"
-        v-model="archived"
-        name="archived"
-        placeholder="false"
+      <ToggleSwitch
+        :checked="archived"
+        :labelText="'Archived'"
+        @unchecked="unarchive"
+        @checked="archive"
       />
     </div>
 
     <div class="form-control">
-      <label>Trial</label>
-      <input type="checkbox" v-model="trial" name="trial" placeholder="false" />
-    </div>
-
-    <div class="form-control">
-      <label>Waitlist</label>
-      <input
-        type="checkbox"
-        v-model="waitlist"
-        name="waitlist"
-        placeholder="false"
+      <ToggleSwitch
+        :checked="trial"
+        :labelText="'Trial'"
+        @unchecked="untrial"
+        @checked="entrial"
       />
     </div>
 
@@ -113,8 +106,12 @@
 </template>
 
 <script>
+import ToggleSwitch from "@/components/ToggleSwitch.vue";
 export default {
   name: "MemberForm",
+  components: {
+    ToggleSwitch,
+  },
   data() {
     return {
       id: "",
@@ -130,7 +127,6 @@ export default {
       patrol: "",
       section: "",
       trial: false,
-      waitlist: false,
     };
   },
   props: {
@@ -166,7 +162,6 @@ export default {
         patrol: this.patrol,
         section: this.section,
         trial: this.trial,
-        waitlist: this.waitlist,
       };
       console.log("AddMember.vue emitting update-member");
       this.$emit("update-member", newMember);
@@ -182,13 +177,24 @@ export default {
       this.patrol = "";
       this.section = "";
       this.trial = false;
-      this.waitlist = false;
     },
     trashMember() {
       console.log("MemberForm trashMember()");
       if (confirm("Are you sure?")) {
         this.$emit("delete-member", this.id);
       }
+    },
+    untrial() {
+      this.trial = false;
+    },
+    entrial() {
+      this.trial = true;
+    },
+    unarchive() {
+      this.archived = false;
+    },
+    archive() {
+      this.archived = true;
     },
   },
   created() {
@@ -207,7 +213,6 @@ export default {
     this.patrol = this.prefill.patrol;
     this.section = this.prefill.section;
     this.trial = this.prefill.trial;
-    this.waitlist = this.prefill.waitlist;
 
     console.log("MemberForm exiting created()" + this.section);
   },
