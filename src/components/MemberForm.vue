@@ -60,11 +60,11 @@
     </div>
 
     <div class="form-control">
-      <label>Given Name</label>
+      <label>Preferred Name</label>
       <input
         type="text"
-        v-model="givenname"
-        name="givenname"
+        v-model="preferredname"
+        name="preferredname"
         placeholder="Given Name"
       />
     </div>
@@ -83,7 +83,7 @@
         type="text"
         v-model="legalname"
         name="legalname"
-        placeholder="Legal Given Name"
+        placeholder="If different from Preferred Name"
       />
     </div>
 
@@ -169,7 +169,7 @@ export default {
       dob: "",
       familyname: "",
       gender: "",
-      givenname: "",
+      preferredname: "",
       joindate: "",
       membertype: "",
       patrol: "",
@@ -192,7 +192,7 @@ export default {
         alert("Please add an member family name");
         return;
       }
-      if (!this.givenname) {
+      if (!this.preferredname) {
         alert("Please add an member given name");
         return;
       }
@@ -204,7 +204,7 @@ export default {
         dob: this.dob,
         familyname: this.familyname,
         gender: this.gender,
-        givenname: this.givenname,
+        preferredname: this.preferredname,
         joindate: this.joindate,
         membertype: this.membertype,
         patrol: this.patrol,
@@ -219,7 +219,7 @@ export default {
       this.dob = "";
       this.familyname = "";
       this.gender = "";
-      this.givenname = "";
+      this.preferredname = "";
       this.joindate = "";
       this.membertype = "";
       this.patrol = "";
@@ -261,7 +261,7 @@ export default {
     this.dob = this.prefill.dob;
     this.familyname = this.prefill.familyname;
     this.gender = this.prefill.gender;
-    this.givenname = this.prefill.givenname;
+    this.preferredname = this.prefill.preferredname;
     this.joindate = this.prefill.joindate;
     this.membertype = this.prefill.membertype;
     this.patrol = this.prefill.patrol;

@@ -43,7 +43,7 @@ export default {
       showForm: false,
       prefill: {
         id: null,
-        givenname: null,
+        preferredname: null,
         familyname: null,
         legalname: null,
         parentname: null,
@@ -86,7 +86,7 @@ export default {
 
       console.log("modifiedMember=" + modifiedMember);
 
-      found.givenname = modifiedMember.givenname;
+      found.preferredname = modifiedMember.preferredname;
       found.familyname = modifiedMember.familyname;
       found.legalname = modifiedMember.legalname;
       found.parentname = modifiedMember.parentname;

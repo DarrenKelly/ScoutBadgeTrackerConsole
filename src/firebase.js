@@ -235,7 +235,7 @@ async function initialiseMembers() {
   querySnapshot.forEach((doc) => {
     let newMember = {
       id: doc.id,
-      givenname: doc.data().givenname,
+      preferredname: doc.data().preferredname,
       familyname: doc.data().familyname,
       legalname: doc.data().legalname,
       parentname: doc.data().parentname,

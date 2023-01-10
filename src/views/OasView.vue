@@ -42,7 +42,7 @@
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id" class="scout-row">
           <td class="name-cell end-cell">
-            {{ scout.givenname }}
+            {{ scout.preferredname }}
             <div v-if="member.legalname">'{{ member.legalname }}'</div>
             {{ scout.familyname }}
           </td>
@@ -111,11 +111,17 @@ function allAchievements() {
 
 function filterScoutName(scout, filter) {
   if (scout.legalname) {
-    return (scout.givenname + " " + scout.legalname + " " + scout.familyname)
+    return (
+      scout.preferredname +
+      " " +
+      scout.legalname +
+      " " +
+      scout.familyname
+    )
       .toLowerCase()
       .includes(filter.toLowerCase());
   }
-  return (scout.givenname + " " + scout.familyname)
+  return (scout.preferredname + " " + scout.familyname)
     .toLowerCase()
     .includes(filter.toLowerCase());
 }

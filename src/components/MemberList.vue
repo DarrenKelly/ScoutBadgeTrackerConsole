@@ -22,8 +22,8 @@ function patrolName(a, b) {
     return 1;
   if (a.patrol < b.patrol) return -1;
   if (a.patrol > b.patrol) return 1;
-  if (a.givenname < b.givenname) return -1;
-  if (a.givenname > b.givenname) return 1;
+  if (a.preferredname < b.preferredname) return -1;
+  if (a.preferredname > b.preferredname) return 1;
   if (a.familyname < b.familyname) return -1;
   if (a.familyname > b.familyname) return 1;
   return 0;

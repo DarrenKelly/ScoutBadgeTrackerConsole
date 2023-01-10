@@ -48,7 +48,7 @@
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id">
           <td class="name-cell end-cell">
-            {{ scout.givenname }}
+            {{ scout.preferredname }}
             <div v-if="member.legalname">'{{ member.legalname }}'</div>
             {{ scout.familyname }}
           </td>
@@ -157,7 +157,7 @@ export default {
       }
       console.log("Filter=" + filter);
       return members.filter((scout) =>
-        (scout.givenname + " " + scout.familyname)
+        (scout.preferredname + " " + scout.familyname)
           .toLowerCase()
           .includes(filter.toLowerCase())
       );

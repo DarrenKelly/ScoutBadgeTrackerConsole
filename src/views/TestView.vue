@@ -27,17 +27,17 @@ export default {
   data: function () {
     return {
       teamMembers: [
-        { givenname: "John", familyname: "Doe" },
-        { givenname: "Jane", familyname: "Doe" },
+        { preferredname: "John", familyname: "Doe" },
+        { preferredname: "Jane", familyname: "Doe" },
       ],
     };
   },
   methods: {
     getElements: function (person) {
       return [
-        person.givenname, // more complex in reality
+        person.preferredname, // more complex in reality
         person.familyname,
-        person.givenname + person.familyname,
+        person.preferredname + person.familyname,
       ];
     },
   },

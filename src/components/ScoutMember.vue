@@ -27,7 +27,7 @@
     ]"
   >
     <div class="title">
-      {{ member.givenname }}
+      {{ member.preferredname }}
       <div v-if="member.legalname">'{{ member.legalname }}'</div>
       {{ member.familyname }}
       <p class="date">{{ member.dob }} {{ member.location }}</p>
