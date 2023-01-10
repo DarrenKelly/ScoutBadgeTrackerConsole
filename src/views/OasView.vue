@@ -41,15 +41,26 @@
       </thead>
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id" class="scout-row">
-          <td class="name-cell end-cell">
-            {{ scout.preferredname }}
-            <div v-if="member.legalname">'{{ member.legalname }}'</div>
+          <td
+            v-if="scout.legalname !== undefined"
+            class="name-cell end-cell keeptogether"
+          >
+            {{ scout.preferredname }} "{{ scout.legalname }}"
             {{ scout.familyname }}
+          </td>
+          <td
+            v-if="scout.legalname == undefined"
+            class="name-cell end-cell keeptogether"
+          >
+            {{ scout.preferredname }} {{ scout.familyname }}
           </td>
           <td
             v-for="(value, index) in oasAchievementMap.get(scout.id)"
             :key="index"
-            :class="[value ? 'cell-success' : 'cell-wip']"
+            :class="[
+              value ? 'cell-success' : 'cell-wip',
+              index % 2 == 0 ? 'pyjama1' : 'pyjama2',
+            ]"
           ></td>
         </tr>
       </tbody>
@@ -240,9 +251,17 @@ td {
 .cell-success::after {
   content: "👍";
 }
-
 .cell-wip {
   background: #eee;
   color: black;
+}
+.pyjama1 {
+  background: #eee;
+}
+.pyjama2 {
+  background: rgb(179, 213, 245);
+}
+.keeptogether {
+  white-space: nowrap;
 }
 </style>

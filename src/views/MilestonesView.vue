@@ -47,10 +47,18 @@
       </thead>
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id">
-          <td class="name-cell end-cell">
-            {{ scout.preferredname }}
-            <div v-if="member.legalname">'{{ member.legalname }}'</div>
+          <td
+            v-if="scout.legalname !== undefined"
+            class="name-cell end-cell keeptogether"
+          >
+            {{ scout.preferredname }} "{{ scout.legalname }}"
             {{ scout.familyname }}
+          </td>
+          <td
+            v-if="scout.legalname == undefined"
+            class="name-cell end-cell keeptogether"
+          >
+            {{ scout.preferredname }} {{ scout.familyname }}
           </td>
           <td
             v-for="(value, index) in getMilestoneRow(scout)"
@@ -133,6 +141,9 @@ td {
 .count-cell-challenge {
   background: rgb(253, 153, 2);
   color: black;
+}
+.keeptogether {
+  white-space: nowrap;
 }
 </style>
 
