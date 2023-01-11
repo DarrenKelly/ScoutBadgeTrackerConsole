@@ -7,30 +7,32 @@
   </button>
   <form @submit.prevent="onSubmit" class="member-form">
     <div class="form-control">
-      <label>Member Type</label>
-      <select name="membertype" v-model="membertype">
-        <option value="Youth">Youth</option>
-        <option value="Adult">Adult</option>
-      </select>
-    </div>
-    <div class="form-control">
-      <label>Gender</label>
-      <select name="gender" v-model="gender">
-        <option value="M">Male</option>
-        <option value="F">Female</option>
-        <option value="-">Other</option>
-      </select>
-    </div>
+      <div class="label-control">
+        <label>Member Type</label>
+        <select name="membertype" v-model="membertype">
+          <option value="Youth">Youth</option>
+          <option value="Adult">Adult</option>
+        </select>
+      </div>
 
-    <div>
-      <label>Section</label>
-      <select name="section" v-model="section">
-        <option value="Joey">Joey</option>
-        <option value="Cubs">Cubs</option>
-        <option value="Scouts">Scouts</option>
-        <option value="Venturers">Venturers</option>
-        <option value="Rovers">Rovers</option>
-      </select>
+      <div class="label-control">
+        <label>Gender</label>
+        <select name="gender" v-model="gender">
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+          <option value="-">Other</option>
+        </select>
+      </div>
+      <div class="label-control">
+        <label>Section</label>
+        <select name="section" v-model="section">
+          <option value="Joey">Joey</option>
+          <option value="Cubs">Cubs</option>
+          <option value="Scouts">Scouts</option>
+          <option value="Venturers">Venturers</option>
+          <option value="Rovers">Rovers</option>
+        </select>
+      </div>
     </div>
 
     <div class="form-control">
@@ -40,17 +42,12 @@
         @unchecked="unarchive"
         @checked="archive"
       />
-    </div>
-
-    <div class="form-control">
       <ToggleSwitch
         :checked="trial"
         :labelText="'Trial'"
         @unchecked="untrial"
         @checked="entrial"
       />
-    </div>
-    <div class="form-control">
       <ToggleSwitch
         :checked="greywolf"
         :labelText="'Grey Wolf'"
@@ -60,93 +57,100 @@
     </div>
 
     <div class="form-control">
-      <label>Preferred Name</label>
-      <input
-        type="text"
-        v-model="preferredname"
-        name="preferredname"
-        placeholder="Given Name"
-      />
-    </div>
-    <div class="form-control">
-      <label>Family Name</label>
-      <input
-        type="text"
-        v-model="familyname"
-        name="familyname"
-        placeholder="Family Name"
-      />
-    </div>
-    <div class="form-control">
-      <label>Legal Given Name</label>
-      <input
-        type="text"
-        v-model="legalname"
-        name="legalname"
-        placeholder="If different from Preferred Name"
-      />
-    </div>
-
-    <div class="form-control">
-      <label>Scout ID</label>
-      <input
-        type="text"
-        v-model="scoutid"
-        name="scoutid"
-        placeholder="Scout ID"
-      />
+      <div class="label-control">
+        <label>Preferred Name</label>
+        <input
+          type="text"
+          v-model="preferredname"
+          name="preferredname"
+          placeholder="Given Name"
+        />
+      </div>
+      <div class="label-control">
+        <label>Family Name</label>
+        <input
+          type="text"
+          v-model="familyname"
+          name="familyname"
+          placeholder="Family Name"
+        />
+      </div>
+      <div class="label-control">
+        <label>Legal Given Name</label>
+        <input
+          type="text"
+          v-model="legalname"
+          name="legalname"
+          placeholder="If different from Preferred Name"
+        />
+      </div>
     </div>
 
     <div class="form-control">
-      <label>Date of Birth</label>
-      <input type="date" v-model="dob" name="dob" placeholder="YYYY-MM-DD" />
+      <div class="label-control">
+        <label>Parent's Name</label>
+        <input
+          type="text"
+          v-model="parentname"
+          name="parentname"
+          placeholder="Parent's Name"
+        />
+      </div>
+      <div class="label-control">
+        <label>Scout ID</label>
+        <input
+          type="text"
+          v-model="scoutid"
+          name="scoutid"
+          placeholder="Scout ID"
+        />
+      </div>
     </div>
 
     <div class="form-control">
-      <label>Join Date</label>
-      <input
-        type="date"
-        v-model="joindate"
-        name="joindate"
-        placeholder="YYYY-MM-DD"
-      />
-    </div>
-    <div class="form-control">
-      <label>Invest Date</label>
-      <input
-        type="date"
-        v-model="investdate"
-        name="investdate"
-        placeholder="YYYY-MM-DD"
-      />
-    </div>
-    <div class="form-control">
-      <label>Parent's Name</label>
-      <input
-        type="text"
-        v-model="parentname"
-        name="parentname"
-        placeholder="Parent's Name"
-      />
+      <div class="label-control">
+        <label>Date of Birth</label>
+        <input type="date" v-model="dob" name="dob" placeholder="YYYY-MM-DD" />
+      </div>
+      <div class="label-control">
+        <label>Join Date</label>
+        <input
+          type="date"
+          v-model="joindate"
+          name="joindate"
+          placeholder="YYYY-MM-DD"
+        />
+      </div>
+      <div class="label-control">
+        <label>Invest Date</label>
+        <input
+          type="date"
+          v-model="investdate"
+          name="investdate"
+          placeholder="YYYY-MM-DD"
+        />
+      </div>
     </div>
 
     <div class="form-control">
-      <label>Contact Phone</label>
-      <input
-        type="text"
-        v-model="contactphone"
-        name="contactphone"
-        placeholder="Contact Phone"
-      />
-    </div>
-    <div class="form-control">
-      <label>Contact Email</label>
-      <input
-        type="text"
-        v-model="contactemail"
-        name="contactemail"
-        placeholder="Contact Email"
-      />
+      <div class="label-control">
+        <label>Contact Phone</label>
+        <input
+          type="text"
+          v-model="contactphone"
+          name="contactphone"
+          placeholder="Contact Phone"
+        />
+      </div>
+      <div class="label-control">
+        <label>Contact Email</label>
+        <input
+          type="text"
+          v-model="contactemail"
+          name="contactemail"
+          placeholder="Contact Email"
+        />
+      </div>
     </div>
 
     <input type="submit" value="Save Member" class="btn btn-block" />
@@ -286,9 +290,14 @@ export default {
 <style scoped>
 .member-form {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 .form-control {
   margin: 20px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .form-control label {
   display: block;
@@ -299,6 +308,11 @@ export default {
   margin: 5px;
   padding: 3px 7px;
   font-size: 17px;
+}
+.label-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .two-elements {
   display: grid;

@@ -139,7 +139,7 @@ td {
   color: black;
 }
 .count-cell-challenge {
-  background: rgb(253, 153, 2);
+  background: #ff9900;
   color: black;
 }
 .keeptogether {
@@ -185,7 +185,7 @@ export default {
       scouts: members,
       goals: [
         {
-          participate: 1, // 6 activities from each of the 4 Challenge Areas
+          participate: 6 * 4, // 6 activities from each of the 4 Challenge Areas
           assist: 2,
           lead: 1,
         },
@@ -250,6 +250,8 @@ export default {
       }
       return false;
     },
+    // Return an array with the number of activites in each
+    // cell for a given scout
     getMilestoneRow: function (scout) {
       var participations = 0;
       var assists = 0;

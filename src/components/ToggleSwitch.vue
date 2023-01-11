@@ -99,7 +99,8 @@ input:checked + .slider:before {
   display: flex;
   height: 100px;
   width: 200px;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
