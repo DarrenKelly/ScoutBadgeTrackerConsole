@@ -1,6 +1,6 @@
 <template>
   <div class="milestones">
-    <div>
+    <div class="header">
       <form id="filter">
         Filter <input name="query" v-model="filterText" />
       </form>
@@ -33,7 +33,7 @@
           <th
             v-for="(i_can_text, index) in this.flatOasStatements"
             :key="index"
-            :class="['statements']"
+            :class="['statements', index % 2 == 0 ? 'c1' : 'c2']"
           >
             {{ i_can_text }}
           </th>
@@ -55,13 +55,19 @@
             {{ scout.preferredname }} {{ scout.familyname }}
           </td>
           <td
-            v-for="(value, index) in oasAchievementMap.get(scout.id)"
+            v-for="(value, index) in oasActivityAchievementMap.get(scout.id)"
             :key="index"
-            :class="[
-              value ? 'cell-success' : 'cell-wip',
-              index % 2 == 0 ? 'pyjama1' : 'pyjama2',
-            ]"
-          ></td>
+            v-bind="value"
+            :class="index % 2 == 0 ? 'c1' : 'c2'"
+          >
+            <OasButton
+              @manual-change="onManualChange"
+              :oasStatement="this.flatOasStatements[index]"
+              :scoutId="scout.id"
+              :initiallySetManually="this.manuallyAdded.get(scout.id)[index]"
+              :activitySet="value"
+            />
+          </td>
         </tr>
       </tbody>
     </table>
@@ -72,8 +78,11 @@
 import { ref, computed } from "vue";
 import { members, activities } from "@/firebase";
 import { oasStatements, allOasStatements } from "@/scouting";
+import OasButton from "@/components/widgets/OasButton";
 
-function allAchievements() {
+// Get a mapping from scouts to OAS "I Can ..." statements that
+// they have achieved by dint of attending an activity.
+function allActivityAchievements() {
   // First, build a map from "I can ..." statements to activities
   let iCanActivities = new Map();
   activities.forEach((act) => {
@@ -120,6 +129,33 @@ function allAchievements() {
   return retVal;
 }
 
+// Extract achievements that are on the scout's individual
+// records and return them in a Map.
+function allManuallyAddedAchievements() {
+  let retVal = new Map();
+  members.forEach((scout) => {
+    let scoutArray = new Array();
+
+    retVal.set(scout.id, scoutArray);
+    // @todo
+    // For each "I can ..." statement look at the
+    // this scout's manual OAS statemets and
+    // mark it as true if presant, false otherwise
+    allOasStatements.forEach((text) => {
+      if (scout.iCan == undefined) {
+        scoutArray.push(false);
+      } else {
+        if (scout.iCan.includes(text)) {
+          scoutArray.push(true);
+        } else {
+          scoutArray.push(false);
+        }
+      }
+    });
+  });
+  return retVal;
+}
+
 function filterScoutName(scout, filter) {
   if (scout.legalname) {
     return (
@@ -139,6 +175,9 @@ function filterScoutName(scout, filter) {
 
 export default {
   name: "OasView",
+  components: {
+    OasButton,
+  },
   setup() {
     const filterText = ref("");
     const filteredScouts = computed(() => {
@@ -150,12 +189,16 @@ export default {
       console.log("Filter=" + filter);
       return members.filter((scout) => filterScoutName(scout, filter));
     });
-    const oasAchievementMap = allAchievements();
+    const oasActivityAchievementMap = allActivityAchievements();
     return {
       filterText,
       filteredScouts,
-      oasAchievementMap,
+      oasActivityAchievementMap,
     };
+  },
+  created() {
+    console.log("OasView created()");
+    this.manuallyAdded = allManuallyAddedAchievements();
   },
   data: function () {
     return {
@@ -163,10 +206,21 @@ export default {
       scouts: members,
       statements: oasStatements,
       flatOasStatements: allOasStatements,
+      manuallyAdded: [],
     };
   },
   computed: {},
   methods: {
+    onManualChange(statement, scoutId, newValue) {
+      console.log(
+        "ManualChange to " +
+          newValue +
+          " for scout=" +
+          scoutId +
+          " ," +
+          statement
+      );
+    },
     countAll(statementSet) {
       let count = 0;
       statementSet.requirements.forEach((el) => {
@@ -192,6 +246,33 @@ export default {
       });
       return retVal;
     },
+    setAchievement(scoutID, oasIndex, newValue) {
+      console.log(
+        "setAchievement(" + scoutID + ", " + oasIndex + ", " + newValue + ")"
+      );
+      this.oasActivityAchievementMap.get(scoutID)[oasIndex] = newValue;
+    },
+  },
+  beforeCreate() {
+    console.log("OasView beforeCreate()");
+  },
+  beforeMount() {
+    console.log("OasView beforeMount()");
+  },
+  mounted() {
+    console.log("OasView mounted()");
+  },
+  beforeUnmount() {
+    console.log("OasView beforeUnmount()");
+  },
+  unmounted() {
+    console.log("OasView unmounted()");
+  },
+  beforeUpdate() {
+    console.log("OasView beforeUpdate()");
+  },
+  unpdate() {
+    console.log("OasView unpdate()");
   },
 };
 </script>
@@ -244,24 +325,16 @@ td {
 .name-cell {
   text-align: left;
 }
-.cell-success {
-  background: #83ac86;
-  color: black;
-}
-.cell-success::after {
-  content: "👍";
-}
-.cell-wip {
-  background: #eee;
-  color: black;
-}
-.pyjama1 {
+.c1 {
   background: #eee;
 }
-.pyjama2 {
+.c2 {
   background: rgb(179, 213, 245);
 }
 .keeptogether {
   white-space: nowrap;
+}
+.header {
+  display: flex;
 }
 </style>

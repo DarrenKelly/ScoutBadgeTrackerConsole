@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import StyledButton from "./StyledButton";
+import StyledButton from "./widgets/StyledButton";
 export default {
   name: "ActivitiesHeader",
   components: {

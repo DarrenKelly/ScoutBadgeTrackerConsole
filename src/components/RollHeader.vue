@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import StyledButton from "./StyledButton";
+import StyledButton from "@/components/widgets/StyledButton";
 export default {
   name: "RollHeader",
   components: {

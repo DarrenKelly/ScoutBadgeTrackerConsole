@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import ToggleSwitch from "@/components/ToggleSwitch.vue";
+import ToggleSwitch from "@/components/widgets/ToggleSwitch.vue";
 export default {
   name: "MemberForm",
   components: {

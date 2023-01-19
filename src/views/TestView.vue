@@ -1,44 +1,51 @@
 <template>
+  <StyledButton
+    @clicked="onButtonClicked"
+    :button_text="'GO!'"
+    :colour="'green'"
+  />
   <div class="test">
     <h1>This page is for testing only.</h1>
     <h2>You should not see this page</h2>
     <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Participate</th>
-          <th>Assist</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="teamMember in teamMembers" :key="teamMember.id">
-          <td v-for="value in getElements(teamMember)" :key="value">
-            {{ value }}
-          </td>
-        </tr>
-      </tbody>
+      <tr v-for="(teamMember, index) in this.teamMembers" :key="index">
+        <td v-for="value in getElements(teamMember)" :key="value">
+          {{ value }}
+        </td>
+      </tr>
     </table>
   </div>
 </template>
 
 <script>
+import { writeMember } from "@/firebase";
+import StyledButton from "@/components/widgets/StyledButton";
+
+const exportedMemberData = [];
+
 export default {
   name: "TestView",
+  components: {
+    StyledButton,
+  },
   data: function () {
     return {
-      teamMembers: [
-        { preferredname: "John", familyname: "Doe" },
-        { preferredname: "Jane", familyname: "Doe" },
-      ],
+      teamMembers: exportedMemberData,
     };
   },
   methods: {
     getElements: function (person) {
-      return [
-        person.preferredname, // more complex in reality
-        person.familyname,
-        person.preferredname + person.familyname,
-      ];
+      let retVal = [];
+
+      Object.keys(person).forEach(function (prop) {
+        retVal.push(person[prop]);
+      });
+      return retVal;
+    },
+    onButtonClicked: function () {
+      this.teamMembers.forEach(function (person) {
+        writeMember(person);
+      });
     },
   },
 };

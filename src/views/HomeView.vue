@@ -29,7 +29,7 @@ import { googlePopupLogin, initialise } from "@/firebase";
 import { FireAuth } from "@/firebaseInit";
 import router from "@/router";
 import { signOut, onAuthStateChanged } from "@firebase/auth";
-import StyledButton from "@/components/StyledButton";
+import StyledButton from "@/components/widgets/StyledButton";
 
 export default {
   name: "HomeView",

@@ -133,7 +133,7 @@
 
 <script>
 import { activityTypes, challengeTypes, oasStatements } from "@/scouting.js";
-import CollapsableOptionSet from "@/components/CollapsableOptionSet.vue";
+import CollapsableOptionSet from "@/components/widgets/CollapsableOptionSet.vue";
 
 function concatenateAll(arrayArray) {
   let retVal = new Array();
