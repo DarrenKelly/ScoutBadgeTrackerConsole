@@ -1,59 +1,80 @@
 <template>
-  <StyledButton
-    @clicked="onButtonClicked"
-    :button_text="'GO!'"
-    :colour="'green'"
-  />
   <div class="test">
     <h1>This page is for testing only.</h1>
     <h2>You should not see this page</h2>
-    <table>
-      <tr v-for="(teamMember, index) in this.teamMembers" :key="index">
-        <td v-for="value in getElements(teamMember)" :key="value">
-          {{ value }}
-        </td>
-      </tr>
-    </table>
   </div>
+
+  <table>
+    <tr v-for="y in myMap" :key="y[0]">
+      <td>
+        {{ y[0] }}
+      </td>
+      <td v-for="(value, index) in y[1]" :key="index" v-bind="value[0]">
+        <button
+          @click="(...args) => onManualChange(index, y[0])"
+          :class="[value[0] ? 'cell-yes' : 'cell-no']"
+        ></button>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script>
-import { writeMember } from "@/firebase";
-import StyledButton from "@/components/widgets/StyledButton";
-
-const exportedMemberData = [];
-
 export default {
-  name: "TestView",
-  components: {
-    StyledButton,
-  },
+  name: "TestVue",
   data: function () {
     return {
-      teamMembers: exportedMemberData,
+      myMap: new Map(),
     };
   },
+  created() {
+    console.log("created()");
+    this.myMap.set("Amy", [
+      [true, true],
+      [true, true],
+      [true, false],
+      [true, false],
+    ]);
+    this.myMap.set("Bob", [
+      [false, true],
+      [false, true],
+      [false, true],
+      [false, true],
+    ]);
+    this.myMap.set("Cam", [
+      [true, false],
+      [false, false],
+      [true, false],
+      [false, false],
+    ]);
+    console.log("created()-");
+  },
   methods: {
-    getElements: function (person) {
-      let retVal = [];
-
-      Object.keys(person).forEach(function (prop) {
-        retVal.push(person[prop]);
-      });
-      return retVal;
-    },
-    onButtonClicked: function () {
-      this.teamMembers.forEach(function (person) {
-        writeMember(person);
-      });
+    onManualChange(index, id) {
+      console.log("onManualChange()");
+      let isFixed = this.myMap.get(id)[index][1];
+      if (!isFixed) {
+        this.myMap.get(id)[index][0] = !this.myMap.get(id)[index][0];
+      }
+      console.log("onManualChange() - ");
     },
   },
 };
 </script>
+
 <style scoped>
-table,
-th,
-td {
-  border: 1px solid;
+.cell-yes {
+  background: #83ac86;
+  color: black;
+}
+.cell-yes::after {
+  content: "👍";
+}
+.cell-no {
+  background: #eee;
+  color: black;
+}
+.cell-no::after {
+  content: "⬜";
 }
 </style>
