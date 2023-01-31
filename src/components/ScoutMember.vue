@@ -28,9 +28,10 @@
   >
     <div class="title">
       {{ member.preferredname }}
-      <div v-if="member.legalname">'{{ member.legalname }}'</div>
+      {{ "member.legalname" ? member.legalname : "" }}
       {{ member.familyname }}
-      <p class="date">{{ member.dob }} {{ member.location }}</p>
+      <p class="date">{{ member.dob }}</p>
+      {{ member.location }}
     </div>
     <div>
       <img
@@ -42,7 +43,6 @@
         :class="[state == 'Leader' ? 'icon' : 'gone']"
       />
     </div>
-
     <div>
       {{ member.type }} {{ member.section }} {{ member.patrol ? "," : "" }}
       {{ member.patrol }}
@@ -130,6 +130,9 @@ export default {
   height: 2cm;
   margin: 5px;
   padding: 10px 5px;
+}
+.title {
+  white-space: nowrap;
 }
 .helper {
   background: #a4d4a4;
