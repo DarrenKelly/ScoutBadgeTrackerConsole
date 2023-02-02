@@ -9,7 +9,7 @@
     <table class="oas-table">
       <thead>
         <tr class="category-row">
-          <th rowspan="3">Scout</th>
+          <th rowspan="4">Scout</th>
 
           <th
             v-for="(statement, index) in myStatements"
@@ -38,6 +38,15 @@
             {{ i_can_text }}
           </th>
         </tr>
+        <tr class="percentage-row">
+          <th
+            v-for="(i_can_text, index) in this.flatOasStatements"
+            :key="index"
+            :class="['percentage', index % 2 == 0 ? 'c1' : 'c2']"
+          >
+            {{ get_percentage(index) }}%
+          </th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id" class="scout-row">
@@ -59,6 +68,7 @@
             v-for="(value, index) in oasActivityAchievementMap.get(scout.id)
               .oasAchievements"
             :key="index"
+            :class="[index % 2 == 0 ? 'c1' : 'c2']"
             v-bind="value[0]"
           >
             <button
@@ -93,9 +103,7 @@ function allActivityAchievements(retVal) {
   // First, build a map from "I can ..." statements to activities
   let iCanActivities = new Map();
   activities.forEach((act) => {
-    console.log("act=" + JSON.stringify(act));
     act.ican.forEach((ican) => {
-      console.log("ican=" + ican);
       if (iCanActivities.has(ican)) {
         let arr = iCanActivities.get(ican);
         arr.push(act);
@@ -107,7 +115,6 @@ function allActivityAchievements(retVal) {
       }
     });
   });
-  console.log("iCanActivities=" + JSON.stringify(iCanActivities.values()));
 
   members.forEach((scout_o) => {
     retVal.set(scout_o.id, { scout: scout_o, oasAchievements: [] });
@@ -212,8 +219,20 @@ export default {
   created() {
     allActivityAchievements(this.oasActivityAchievementMap);
   },
-  computed: {},
   methods: {
+    get_percentage: function (statementIndex) {
+      let count = 0;
+      members.forEach((scout) => {
+        if (
+          this.oasActivityAchievementMap.get(scout.id).oasAchievements[
+            statementIndex
+          ][0]
+        ) {
+          count = count + 1;
+        }
+      });
+      return Math.round((100 * count) / this.oasActivityAchievementMap.size);
+    },
     onManualChange(statementIndex, scout, oldValue, earnedByActivity) {
       if (!earnedByActivity) {
         this.oasActivityAchievementMap.get(scout.id).oasAchievements[
@@ -269,20 +288,12 @@ export default {
 
       if (!arrayContentMatches(scout.ican, ui_ican)) {
         // Some element of the OAS statements for this scout has changed
-        console.log(
-          "some element of the OAS statements for this scout has changed"
-        );
-
         if (ui_ican.length == 0) {
           scout.ican = undefined;
         } else {
           scout.ican = ui_ican;
         }
-        console.log("writing scout=" + JSON.stringify(scout));
         writeMember(scout);
-        console.log(
-          "Wrote 'I can ...' statements for scout with ID" + scout.id
-        );
       }
     });
   },
