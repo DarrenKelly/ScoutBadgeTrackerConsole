@@ -79,6 +79,7 @@ export default {
       );
 
       found.type = modifiedActivity.type;
+      found.challengeType = modifiedActivity.challengeType;
       found.name = modifiedActivity.name;
       found.date = modifiedActivity.date;
       found.location = modifiedActivity.location;

@@ -199,6 +199,7 @@ async function initialiseActivities() {
       id: doc.id,
       name: doc.data().name,
       type: doc.data().type,
+      challengeType: doc.data().challengeType,
       date: doc.data().date,
       duration: doc.data().duration,
       location: doc.data().location,
@@ -253,6 +254,7 @@ async function initialiseMembers() {
       dob: getISODate(doc.data().dob),
       joindate: getISODate(doc.data().joindate),
       membertype: doc.data().membertype,
+      ican: doc.data().ican,
     };
     members.push(newMember);
   });
