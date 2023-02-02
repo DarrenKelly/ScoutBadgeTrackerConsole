@@ -59,7 +59,7 @@ export default {
     },
   },
   created() {
-    console.log("CollapsableOptionSet created()");
+    console.log("CollapsableOptionSet created() " + this.selected);
     this.selectedStatements = this.selected;
   },
 };

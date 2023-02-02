@@ -207,8 +207,11 @@ async function initialiseActivities() {
       theme: doc.data().theme,
       note: doc.data().note,
       participants: doc.data().participants,
-      iCan: doc.data().iCan,
+      ican: doc.data().ican,
     };
+    if (newActivity.ican == undefined) {
+      newActivity.ican = new Array();
+    }
     activities.push(newActivity);
   });
 

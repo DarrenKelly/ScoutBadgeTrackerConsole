@@ -76,7 +76,7 @@
 
 <script>
 import { ref, computed } from "vue";
-import { members, activities } from "@/firebase";
+import { members, writeMember, activities } from "@/firebase";
 import { oasStatements, allOasStatements } from "@/scouting";
 
 // Get a mapping from scouts to OAS "I Can ..." statements that
@@ -93,18 +93,21 @@ function allActivityAchievements(retVal) {
   // First, build a map from "I can ..." statements to activities
   let iCanActivities = new Map();
   activities.forEach((act) => {
-    act.iCan.forEach((iCan) => {
-      if (iCanActivities.has(iCan)) {
-        let arr = iCanActivities.get(iCan);
+    console.log("act=" + JSON.stringify(act));
+    act.ican.forEach((ican) => {
+      console.log("ican=" + ican);
+      if (iCanActivities.has(ican)) {
+        let arr = iCanActivities.get(ican);
         arr.push(act);
-        iCanActivities.set(iCan, arr);
+        iCanActivities.set(ican, arr);
       } else {
         let arr = new Array();
         arr.push(act);
-        iCanActivities.set(iCan, arr);
+        iCanActivities.set(ican, arr);
       }
     });
   });
+  console.log("iCanActivities=" + JSON.stringify(iCanActivities.values()));
 
   members.forEach((scout_o) => {
     retVal.set(scout_o.id, { scout: scout_o, oasAchievements: [] });
@@ -136,10 +139,10 @@ function allActivityAchievements(retVal) {
         // For each "I can ..." statement look at
         // this scout's manual OAS statemets and
         // mark it as true if presant, false otherwise
-        if (arr.scout.iCan == undefined) {
+        if (arr.scout.ican == undefined) {
           arr.oasAchievements.push([false, false]);
         } else {
-          arr.oasAchievements.push([arr.scout.iCan.includes(text), false]);
+          arr.oasAchievements.push([arr.scout.ican.includes(text), false]);
         }
       }
     });
@@ -164,6 +167,19 @@ function filterScoutName(scout, filter) {
   return (scout.preferredname + " " + scout.familyname)
     .toLowerCase()
     .includes(filter.toLowerCase());
+}
+
+function arrayContentMatches(array1, array2) {
+  if (array1 == undefined || array1.length == 0) {
+    if (array2 == undefined || array2.length == 0) {
+      return true;
+    }
+  } else if (array2 == undefined || array1 == undefined) {
+    return false;
+  } else if (array1.sort().join(",") === array2.sort().join(",")) {
+    return true;
+  }
+  return false;
 }
 
 export default {
@@ -233,6 +249,42 @@ export default {
   },
   beforeUnmount() {
     console.log("OasView beforeUnmount()");
+    // Need to check if any of the individual scout's achievements need to be updated.
+
+    members.forEach((scout) => {
+      // for this scout, construct a list of individual achievements per the UI
+      let statuses = this.oasActivityAchievementMap.get(
+        scout.id
+      ).oasAchievements;
+      let ui_ican = new Array();
+      let index = 0;
+      statuses.forEach((status) => {
+        if (status[0] && !status[1]) {
+          // UI says scout achieved this I can ... Statement
+          // without attending a group activity.
+          ui_ican.push(this.flatOasStatements[index]);
+        }
+        index = index + 1;
+      });
+
+      if (!arrayContentMatches(scout.ican, ui_ican)) {
+        // Some element of the OAS statements for this scout has changed
+        console.log(
+          "some element of the OAS statements for this scout has changed"
+        );
+
+        if (ui_ican.length == 0) {
+          scout.ican = undefined;
+        } else {
+          scout.ican = ui_ican;
+        }
+        console.log("writing scout=" + JSON.stringify(scout));
+        writeMember(scout);
+        console.log(
+          "Wrote 'I can ...' statements for scout with ID" + scout.id
+        );
+      }
+    });
   },
   unmounted() {
     console.log("OasView unmounted()");

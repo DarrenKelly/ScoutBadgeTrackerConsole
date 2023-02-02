@@ -125,7 +125,7 @@
       :key="index"
       :sectionTitle="oas.area + ' ' + oas.stage"
       :labelset="oas.requirements"
-      :selected="iCan"
+      :selected="ican"
       @update="(list) => onUpdate(index, list)"
     />
   </form>
@@ -170,7 +170,7 @@ export default {
       // for display purposes, we also need to track
       // them by the CollapsableOptionSet that groups
       // a subset of the statemets.
-      iCan: [], // unified list of statements
+      ican: [], // unified list of statements
       selectedICanStatements: [], // grouped by area
 
       activityOptions: activityTypes,
@@ -205,7 +205,7 @@ export default {
         hikeKms: this.hikeKms,
         note: this.note,
         participants: this.participants,
-        iCan: concatenateAll(this.selectedICanStatements),
+        ican: concatenateAll(this.selectedICanStatements),
       };
       console.log("AddActivity.vue emitting update-activity");
       console.log("AddActivity " + JSON.stringify(newActivity));
@@ -219,7 +219,7 @@ export default {
       this.hikeKms = "";
       this.note = "";
       this.participants = [];
-      this.iCan = [];
+      this.selectedICanStatements = [];
     },
     trashActivity() {
       console.log("ActivityForm trashActivity()");
@@ -232,7 +232,7 @@ export default {
     },
   },
   created() {
-    console.log("ActivityForm created()");
+    console.log("ActivityForm created() " + this.prefill.ican);
     this.oasOptions.forEach(() => {
       this.selectedICanStatements.push([]);
     });
@@ -248,7 +248,7 @@ export default {
     this.theme = this.prefill.theme;
     this.note = this.prefill.note;
     this.participants = this.prefill.participants;
-    this.iCan = this.prefill.iCan;
+    this.ican = this.prefill.ican;
 
     oasStatements;
   },

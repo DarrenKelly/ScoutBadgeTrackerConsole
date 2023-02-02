@@ -58,7 +58,7 @@ export default {
         theme: null,
         note: null,
         participants: [],
-        iCan: [],
+        ican: [],
       },
     };
   },
@@ -88,7 +88,7 @@ export default {
       found.theme = modifiedActivity.theme;
       found.note = modifiedActivity.note;
       found.participants = modifiedActivity.participants;
-      found.iCans = modifiedActivity.iCans;
+      found.ican = modifiedActivity.ican;
 
       writeActivity(modifiedActivity);
     },
