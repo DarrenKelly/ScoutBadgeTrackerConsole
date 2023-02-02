@@ -126,6 +126,9 @@ export default {
   },
   beforeUnmount() {
     console.log("RollView beforeUnmount()");
+    if (this.selectedActivityId != "") {
+      this.saveRollcall();
+    }
   },
   unmounted() {
     console.log("RollView unmounted()");
