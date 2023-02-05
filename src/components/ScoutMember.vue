@@ -11,17 +11,17 @@
         : state == 'Attended'
         ? 'attended'
         : '',
-      member.patrol == 'RED'
+      member.patrol == 'Red'
         ? 'red-patrol'
-        : member.patrol == 'ORANGE'
+        : member.patrol == 'Orange'
         ? 'orange-patrol'
-        : member.patrol == 'PURPLE'
+        : member.patrol == 'Purple'
         ? 'purple-patrol'
-        : member.patrol == 'YELLOW'
+        : member.patrol == 'Yellow'
         ? 'yellow-patrol'
-        : member.patrol == 'BLUE'
+        : member.patrol == 'Blue'
         ? 'blue-patrol'
-        : member.patrol == 'GREEN'
+        : member.patrol == 'Green'
         ? 'green-patrol'
         : '',
     ]"
