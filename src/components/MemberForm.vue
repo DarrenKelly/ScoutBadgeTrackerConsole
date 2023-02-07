@@ -97,6 +97,17 @@
         />
       </div>
       <div class="label-control">
+        <label>Patrol</label>
+        <select name="patrol" v-model="patrol">
+          <option value="Blue">Blue</option>
+          <option value="Green">Green</option>
+          <option value="Orange">Orange</option>
+          <option value="Purple">Purple</option>
+          <option value="Red">Red</option>
+          <option value="Yellow">Yellow</option>
+        </select>
+      </div>
+      <div class="label-control">
         <label>Scout ID</label>
         <input
           type="text"
