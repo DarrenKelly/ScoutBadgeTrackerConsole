@@ -1,3 +1,6 @@
+<!-- Including one css file into other -->
+@import "public/main.css";
+
 <template>
   <div class="switch-label">
     <label class="switch">
@@ -47,7 +50,7 @@ export default {
   right: 0;
   bottom: 0;
   background-color: #6225993d;
-  box-shadow: 0 0 3px #622599;
+  box-shadow: 0 0 3px var(--scoutpurple);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -60,17 +63,17 @@ export default {
   left: 4px;
   bottom: 4px;
   background-color: #eee;
-  box-shadow: 0 0 3px #622599;
+  box-shadow: 0 0 3px var(--scoutpurple);
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #622599;
+  background-color: var(--scoutpurple);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 3px #622599;
+  box-shadow: 0 0 3px var(--scoutpurple);
 }
 
 input:checked + .slider:before {
