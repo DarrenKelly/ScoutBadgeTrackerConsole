@@ -243,6 +243,11 @@ export default {
       this.contactphone = "";
       this.dob = "";
       this.familyname = "";
+      this.legalname = "";
+      this.parentname = "";
+      this.greywolf = false;
+      this.scoutid = "";
+      this.investdate = "";
       this.gender = "";
       this.preferredname = "";
       this.joindate = "";
@@ -285,6 +290,11 @@ export default {
     this.contactphone = this.prefill.contactphone;
     this.dob = this.prefill.dob;
     this.familyname = this.prefill.familyname;
+    this.legalname = this.prefill.legalname;
+    this.parentname = this.prefill.parentname;
+    this.greywolf = this.prefill.greywolf;
+    this.scoutid = this.prefill.scoutid;
+    this.investdate = this.prefill.investdate;
     this.gender = this.prefill.gender;
     this.preferredname = this.prefill.preferredname;
     this.joindate = this.prefill.joindate;
