@@ -17,8 +17,9 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
-# Editor directories and files
-.vscode/*
+# Editor directories and untracked files
+.vscode
+.firebase
 !.vscode/extensions.json
 .idea
 *.suo

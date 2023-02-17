@@ -61,10 +61,10 @@ function googlePopupLogin() {
   console.log("googlePopupLogin()");
   signInWithPopup(FireAuth.getInstance(), provider)
     .then((result) => {
-      console.log("Google user=" + result.user);
+      console.log("Google user=" + JSON.stringify(result.user));
     })
     .catch((error) => {
-      console.log("Google Login error:" + error.errorMessage);
+      console.error("Google Login error:" + error.errorMessage);
     });
 }
 
@@ -190,7 +190,7 @@ async function initialiseActivities() {
   );
 
   let querySnapshot = await getDocs(q).catch((err) => {
-    console.log("Error returned by server:" + err);
+    console.error("Error returned by server:" + err);
   });
 
   activities.length = 0;
