@@ -131,7 +131,7 @@ td {
   color: black;
 }
 .count-cell-wip {
-  background: #aeeeb4;
+  background: #ff9900;
   color: black;
 }
 .count-cell-not-started {
@@ -139,7 +139,7 @@ td {
   color: black;
 }
 .count-cell-challenge {
-  background: #ff9900;
+  background: #2eaf00;
   color: black;
 }
 .keeptogether {
