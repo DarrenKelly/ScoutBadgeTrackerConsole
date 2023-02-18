@@ -50,19 +50,9 @@
       </thead>
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id" class="scout-row">
-          <td
-            v-if="scout.legalname !== undefined"
-            class="name-cell end-cell keeptogether"
-          >
-            {{ scout.preferredname }} "{{ scout.legalname }}"
-            {{ scout.familyname }}
-          </td>
-          <td
-            v-if="scout.legalname == undefined"
-            class="name-cell end-cell keeptogether"
-          >
+          <tdF class="name-cell end-cell keeptogether">
             {{ scout.preferredname }} {{ scout.familyname }}
-          </td>
+          </tdF>
 
           <td
             v-for="(value, index) in oasActivityAchievementMap.get(scout.id)
@@ -198,7 +188,9 @@ export default {
       let filter = filterText.value;
       if (!filter.length) {
         console.log("No Filter");
-        return members;
+        return members.filter(function (s) {
+          return !s.archived;
+        });
       }
       console.log("Filter=" + filter);
       return members.filter((scout) => filterScoutName(scout, filter));
