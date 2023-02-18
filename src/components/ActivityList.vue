@@ -42,7 +42,7 @@ export default {
       // multi-day activities may not even be finished.
       let today = new Date();
       let lastInterestingDay = new Date();
-      lastInterestingDay.setDate(today.getDate() - 5);
+      lastInterestingDay.setDate(today.getDate() - 21);
       return s < lastInterestingDay.toISOString().split("T")[0];
     },
     updateActivity(modifiedActivity) {

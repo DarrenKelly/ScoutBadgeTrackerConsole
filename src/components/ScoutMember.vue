@@ -30,8 +30,6 @@
       {{ member.preferredname }}
       {{ "member.legalname" ? member.legalname : "" }}
       {{ member.familyname }}
-      <p class="date">{{ member.dob }}</p>
-      {{ member.location }}
     </div>
     <div>
       <img
@@ -44,9 +42,11 @@
       />
     </div>
     <div>
-      {{ member.type }} {{ member.section }} {{ member.patrol ? "," : "" }}
-      {{ member.patrol }}
-      {{ member.patrol ? "patrol" : "" }}
+      {{ member.patrol }}{{ member.patrol ? " patrol," : "" }}
+      {{ member.role ? member.role + ", " : "" }} Contact:{{
+        member.parentname
+      }}
+      {{ member.contactphone }}
     </div>
   </div>
   <div v-if="enableEdit && showEditForm">
