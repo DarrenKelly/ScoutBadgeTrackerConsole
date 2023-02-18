@@ -7,6 +7,11 @@
       colour="red"
     />
     <StyledButton
+      @clicked="onArchivedButtonClicked"
+      button_text="Show Archived"
+      colour="blue"
+    />
+    <StyledButton
       @clicked="onSaveButtonClicked"
       button_text="Save"
       colour="green"
@@ -27,6 +32,10 @@ export default {
     onCancelButtonClicked() {
       console.log("Rollcall Canceled");
       this.$emit("cancel-changes");
+    },
+    onArchivedButtonClicked() {
+      console.log("Toggling Archived");
+      this.$emit("toggle-archived");
     },
     onSaveButtonClicked() {
       console.log("Rollcall Saving");

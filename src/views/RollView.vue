@@ -10,6 +10,7 @@
     <RollHeader
       v-if="selectedActivityId != ''"
       @save-rollcall="saveRollcall"
+      @toggle-archived="toggleArchived"
       @cancel-changes="cancelChanges"
     />
     <ActivityList
@@ -26,7 +27,7 @@
       :members="membersdata"
       :participants="participants"
       :enableEdit="false"
-      :hideOldMembers="true"
+      :hideOldMembers="hideArchivedMembers"
     />
   </div>
 </template>
@@ -53,6 +54,7 @@ export default {
       participants: [],
       membersdata: members,
       hideOldActivities: true,
+      hideArchivedMembers: true,
     };
   },
   methods: {
@@ -90,8 +92,12 @@ export default {
 
       this.selectedActivityId = "";
     },
+    toggleArchived() {
+      console.log("RollView toggleArchived()");
+      this.hideArchivedMembers = !this.hideArchivedMembers;
+    },
     cancelChanges() {
-      console.log("RollView cancelChanges() ");
+      console.log("RollView cancelChanges()");
       this.selectedActivityId = "";
     },
     changeParticipation(memberId, state) {
