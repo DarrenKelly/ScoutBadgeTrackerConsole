@@ -12,60 +12,7 @@
       <p class="date">{{ activity.date }} {{ activity.location }}</p>
     </div>
     <div class="midblock">
-      <img
-        src="@/assets/Water.png"
-        :class="[
-          activity.type &&
-          (activity.type.includes('Water') ||
-            activity.type.includes('Canoe') ||
-            activity.type.includes('Kayak'))
-            ? 'icon'
-            : 'gone',
-        ]"
-      />
-      <img
-        src="@/assets/Canoe.png"
-        :class="[
-          activity.type &&
-          (activity.type.includes('Canoe') || activity.type.includes('Kayak'))
-            ? 'icon'
-            : 'gone',
-        ]"
-      />
-      <img
-        src="@/assets/GreyWolf.png"
-        :class="[
-          activity.type && activity.type.includes('Wolf') ? 'icon' : 'gone',
-        ]"
-      />
-      <img
-        src="@/assets/CampFire.png"
-        :class="[
-          activity.type &&
-          (activity.type.includes('Camp') ||
-            activity.type.includes('Overnight'))
-            ? 'icon'
-            : 'gone',
-        ]"
-      />
-      <img
-        src="@/assets/Hike.png"
-        :class="[
-          activity.type && activity.type.includes('Hike') ? 'icon' : 'gone',
-        ]"
-      />
-      <img
-        src="@/assets/Plane.png"
-        :class="[
-          activity.type && activity.type.includes('Fly') ? 'icon' : 'gone',
-        ]"
-      />
-      <img
-        src="@/assets/Fishing.png"
-        :class="[
-          activity.type && activity.type.includes('Fish') ? 'icon' : 'gone',
-        ]"
-      />
+      <ActivityIcon :icon_type="activity.type" :compact="true" />
     </div>
     <div>
       <i class="type">{{ activity.type }}</i>
@@ -83,6 +30,7 @@
 
 <script>
 import ActivityForm from "@/components/ActivityForm.vue";
+import ActivityIcon from "@/components/widgets/ActivityIcon.vue";
 
 export default {
   name: "ScoutActivity",
@@ -98,6 +46,7 @@ export default {
   },
   components: {
     ActivityForm,
+    ActivityIcon,
   },
   emits: [
     "update-activity",
