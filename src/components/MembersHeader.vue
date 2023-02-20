@@ -8,7 +8,7 @@
     />
     <StyledButton
       @clicked="onFilterButtonClicked"
-      :button_text="hideOldMembers ? 'Show Old' : 'Hide Old'"
+      :button_text="hideOldMembers ? 'Show Archived' : 'Hide Archived'"
       colour="blue"
     />
   </header>

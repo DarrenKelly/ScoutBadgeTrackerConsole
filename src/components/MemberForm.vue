@@ -88,12 +88,12 @@
 
     <div class="form-control">
       <div class="label-control">
-        <label>Parent's Name</label>
+        <label>Scout ID</label>
         <input
           type="text"
-          v-model="parentname"
-          name="parentname"
-          placeholder="Parent's Name"
+          v-model="scoutid"
+          name="scoutid"
+          placeholder="Scout ID"
         />
       </div>
       <div class="label-control">
@@ -108,12 +108,12 @@
         </select>
       </div>
       <div class="label-control">
-        <label>Scout ID</label>
+        <label>Role</label>
         <input
           type="text"
-          v-model="scoutid"
-          name="scoutid"
-          placeholder="Scout ID"
+          v-model="role"
+          name="role"
+          placeholder="PL, APL, ..."
         />
       </div>
     </div>
@@ -144,6 +144,15 @@
     </div>
 
     <div class="form-control">
+      <div class="label-control">
+        <label>Parent's Name</label>
+        <input
+          type="text"
+          v-model="parentname"
+          name="parentname"
+          placeholder="Parent's Name"
+        />
+      </div>
       <div class="label-control">
         <label>Contact Phone</label>
         <input
@@ -185,7 +194,7 @@ export default {
       familyname: "",
       legalname: "",
       parentname: "",
-      greywolf: "",
+      greywolf: false,
       scoutid: "",
       investdate: "",
       gender: "",
@@ -193,6 +202,7 @@ export default {
       joindate: "",
       membertype: "",
       patrol: "",
+      role: "",
       section: "",
       trial: false,
     };
@@ -233,6 +243,7 @@ export default {
         joindate: this.joindate,
         membertype: this.membertype,
         patrol: this.patrol,
+        role: this.role,
         section: this.section,
         trial: this.trial,
       };
@@ -253,6 +264,7 @@ export default {
       this.joindate = "";
       this.membertype = "";
       this.patrol = "";
+      this.role = "";
       this.section = "";
       this.trial = false;
     },
@@ -292,7 +304,7 @@ export default {
     this.familyname = this.prefill.familyname;
     this.legalname = this.prefill.legalname;
     this.parentname = this.prefill.parentname;
-    this.greywolf = this.prefill.greywolf;
+    this.greywolf = this.prefill.greywolf == "" ? false : this.prefill.greywolf;
     this.scoutid = this.prefill.scoutid;
     this.investdate = this.prefill.investdate;
     this.gender = this.prefill.gender;
@@ -300,6 +312,7 @@ export default {
     this.joindate = this.prefill.joindate;
     this.membertype = this.prefill.membertype;
     this.patrol = this.prefill.patrol;
+    this.role = this.prefill.role;
     this.section = this.prefill.section;
     this.trial = this.prefill.trial;
 
