@@ -19,44 +19,7 @@
           </option>
         </select>
       </div>
-      <div class="img-container">
-        <img
-          src="@/assets/Water.png"
-          :class="[
-            type && (type.includes('Water') || type.includes('Canoe'))
-              ? 'icon'
-              : 'gone',
-          ]"
-        />
-        <img
-          src="@/assets/Canoe.png"
-          :class="[type && type.includes('Canoe') ? 'icon' : 'gone']"
-        />
-        <img
-          src="@/assets/GreyWolf.png"
-          :class="[type && type.includes('Wolf') ? 'icon' : 'gone']"
-        />
-        <img
-          src="@/assets/CampFire.png"
-          :class="[
-            type && (type.includes('Camp') || type.includes('Overnight'))
-              ? 'icon'
-              : 'gone',
-          ]"
-        />
-        <img
-          src="@/assets/Hike.png"
-          :class="[type && type.includes('Hike') ? 'icon' : 'gone']"
-        />
-        <img
-          src="@/assets/Plane.png"
-          :class="[type && type.includes('Fly') ? 'icon' : 'gone']"
-        />
-        <img
-          src="@/assets/Fishing.png"
-          :class="[type && type.includes('Fish') ? 'icon' : 'gone']"
-        />
-      </div>
+      <ActivityIcon :icon_type="type" />
     </div>
     <div class="form-control">
       <label>Challenge Type</label>
@@ -134,6 +97,7 @@
 <script>
 import { activityTypes, challengeTypes, oasStatements } from "@/scouting.js";
 import CollapsableOptionSet from "@/components/widgets/CollapsableOptionSet.vue";
+import ActivityIcon from "@/components/widgets/ActivityIcon.vue";
 
 function concatenateAll(arrayArray) {
   let retVal = new Array();
@@ -151,6 +115,7 @@ export default {
   name: "ActivityForm",
   components: {
     CollapsableOptionSet,
+    ActivityIcon,
   },
   data() {
     return {

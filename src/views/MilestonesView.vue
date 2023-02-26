@@ -25,8 +25,6 @@
           <th colspan="3" scope="colgroup" class="ms-header end-cell">
             Milestone 3
           </th>
-          <td class="end-cell">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <th colspan="3" scope="colgroup" class="ms-header">Scheduled</th>
         </tr>
         <tr>
           <th class="name-header" end-cell>Name</th>
@@ -39,25 +37,11 @@
           <th class="role-header">Participate</th>
           <th class="role-header">Assist</th>
           <th class="role-header end-cell">Lead</th>
-          <th></th>
-          <th class="role-header">Participate</th>
-          <th class="role-header">Assist</th>
-          <th class="role-header">Lead</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id">
-          <td
-            v-if="scout.legalname !== undefined"
-            class="name-cell end-cell keeptogether"
-          >
-            {{ scout.preferredname }} "{{ scout.legalname }}"
-            {{ scout.familyname }}
-          </td>
-          <td
-            v-if="scout.legalname == undefined"
-            class="name-cell end-cell keeptogether"
-          >
+          <td class="name-cell end-cell keeptogether">
             {{ scout.preferredname }} {{ scout.familyname }}
           </td>
           <td
@@ -131,7 +115,7 @@ td {
   color: black;
 }
 .count-cell-wip {
-  background: #aeeeb4;
+  background: #ff9900;
   color: black;
 }
 .count-cell-not-started {
@@ -139,7 +123,7 @@ td {
   color: black;
 }
 .count-cell-challenge {
-  background: #ff9900;
+  background: #2eaf00;
   color: black;
 }
 .keeptogether {
