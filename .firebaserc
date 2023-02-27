@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "scoutbadgestest"
+    "default": "scoutbadgestest",
+    "not-default": "scoutbadges-2g"
   }
 }

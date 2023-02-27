@@ -331,6 +331,8 @@ export default {
   transform: rotate(180deg);
   writing-mode: vertical-rl;
   text-orientation: sideways;
+  -webkit-writing-mode: vertical-rl;
+  -webkit-text-orientation: sideways;
   padding-top: 12px;
   padding-bottom: 12px;
 }
