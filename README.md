@@ -5,6 +5,9 @@ ScoutBadgeTracker is intened as a mobile app. Its HTML and CSS are expected to d
 from ScoutBadgeTrackerConsole. At some point shared functionality will be refactored to
 a shared library.
 
+NOTES:
+ Test using http://localhost:8080/ rather than the explicit IP address of the dev box - the latter will cause a log in error.
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).

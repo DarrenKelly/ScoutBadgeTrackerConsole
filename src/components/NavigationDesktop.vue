@@ -1,4 +1,3 @@
-<!-- 
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link>
@@ -9,17 +8,16 @@
     <router-link to="/oas">OAS</router-link>
     <Badges title="Badges" />
     <router-link to="/about">About</router-link>
-    <!-- <router-link to="/test">Test</router-link> --!>
+    <!-- <router-link to="/test">Test</router-link> -->
   </div>
 </template>
 
 <script>
 import Badges from "../components/Badges";
 export default {
-  name: "TheNavigation",
+  name: "NavigationDesktop",
   components: {
     Badges,
   },
 };
 </script>
--->

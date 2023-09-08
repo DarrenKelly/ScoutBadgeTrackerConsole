@@ -11,7 +11,10 @@
       {{ activity.name }}
       <p class="date">{{ activity.date }} {{ activity.location }}</p>
     </div>
-    <div class="midblock">
+    <div class="midblockl">
+      <p>Attending:{{ activity.participants.length }}</p>
+    </div>
+    <div class="midblockr">
       <ActivityIcon :icon_type="activity.type" :compact="true" />
     </div>
     <div>
@@ -90,7 +93,7 @@ export default {
 .activity {
   background: #f4f4f4;
   display: grid;
-  grid-template-columns: auto auto 60px;
+  grid-template-columns: auto auto auto 60px;
   height: 60px;
   margin: 5px;
   padding: 10px 5px;
@@ -117,7 +120,11 @@ export default {
 .gone {
   display: none;
 }
-.midblock {
+.midblockl {
+  margin-left: 10px;
+  margin-right: auto;
+}
+.midblockr {
   margin-left: auto;
   margin-right: 10px;
 }

@@ -114,6 +114,9 @@ export default {
       } else {
         participant.role = state;
         console.log("New participant role " + participant);
+        if (state == "") {
+          this.participants.splice(this.participants.indexOf(participant), 1);
+        }
       }
     },
   },
