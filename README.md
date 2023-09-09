@@ -7,12 +7,12 @@ from ScoutBadgeTrackerConsole. At some point shared functionality will be refact
 a shared library.
 
 NOTES:
-Test using http://localhost:8080/ rather than the explicit IP address of the dev box - the latter will cause a log in error.
+ Test using http://localhost:8080/ rather than the explicit IP address of the dev box - the latter will cause a log in error.
 
-To deploy
-firebase use scoutbadges-c1523
-npm run build
-firebase deploy --only hosting:scoutbadges-c1523
+ To deploy
+  firebase use scoutbadgestest
+  npm run build
+  firebase deploy --only hosting:scoutbadgestest
 
 ## Recommended IDE Setup
 
