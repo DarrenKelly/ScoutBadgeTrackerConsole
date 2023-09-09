@@ -1,26 +1,46 @@
 <template>
-  <TheNavigation />
-  <div class="container">
-    <router-view v-if="hasLoadedData" />
-    <p v-else>Loading...</p>
+  <div v-if="!isMobile()">
+    <NavigationDesktop />
+    <div class="container">
+      <router-view v-if="hasLoadedData" />
+      <p v-else>Loading...</p>
+    </div>
+  </div>
+  <div v-else>
+    <NavigationMobile />
+    <div class="container">
+      <router-view v-if="hasLoadedData" />
+      <p v-else>Loading...</p>
+    </div>
   </div>
 </template>
-
 <script>
-import TheNavigation from "@/components/TheNavigation.vue";
+import NavigationDesktop from "@/components/NavigationDesktop.vue";
+import NavigationMobile from "@/components/NavigationMobile.vue";
 import { initialise } from "./firebase";
 
 export default {
-  components: { TheNavigation },
+  name: "App",
+
+  components: { NavigationDesktop, NavigationMobile },
 
   data() {
     return { hasLoadedData: false };
+  },
+
+  methods: {
+    isMobile() {
+      if (screen.width <= 760) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   created() {
     initialise("darren");
     this.hasLoadedData = true;
   },
-  methods: {},
 };
 </script>
 

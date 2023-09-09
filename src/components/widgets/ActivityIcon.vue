@@ -73,13 +73,16 @@ export default {
 
 <style scoped>
 .icon {
-  width: 45px;
+  width: 70px;
   margin-top: 45px;
   margin-left: 5px;
-  height: 45px;
+  height: 70px;
 }
 .compact {
+  width: 45px;
   margin-top: 0px;
+  margin-left: 5px;
+  height: 45px;
 }
 
 .gone {

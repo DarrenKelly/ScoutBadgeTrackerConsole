@@ -7,7 +7,7 @@
   </button>
   <form @submit.prevent="onSubmit" class="add-activity-form">
     <div class="typetable">
-      <div class="form-control">
+      <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
         <label>Type</label>
         <select name="type" v-model="type" class="dropdown">
           <option
@@ -21,7 +21,7 @@
       </div>
       <ActivityIcon :icon_type="type" />
     </div>
-    <div class="form-control">
+    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
       <label>Challenge Type</label>
       <select name="challenge" v-model="challengeType" class="dropdown">
         <option
@@ -33,8 +33,8 @@
         </option>
       </select>
     </div>
-    <div class="form-control">
-      <label>activity Name</label>
+    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
+      <label>Activity Name</label>
       <input
         type="text"
         v-model="name"
@@ -42,11 +42,11 @@
         placeholder="activity Name"
       />
     </div>
-    <div class="form-control">
+    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
       <label>Day</label>
       <input type="date" v-model="date" name="date" placeholder="YYYY-MM-DD" />
     </div>
-    <div class="form-control">
+    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
       <label>Location</label>
       <input
         type="text"
@@ -55,7 +55,7 @@
         placeholder="Location"
       />
     </div>
-    <div class="form-control">
+    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
       <label>Duration</label>
       <input
         type="text"
@@ -64,7 +64,15 @@
         placeholder="# Hrs/Days"
       />
     </div>
-    <div :class="[type && type.includes('Hike') ? 'form-control' : 'gone']">
+    <div
+      :class="[
+        type && type.includes('Hike')
+          ? isMobile()
+            ? 'mob_form-control'
+            : 'form-control'
+          : 'gone',
+      ]"
+    >
       <label>Hike Distance</label>
       <input
         type="text"
@@ -73,24 +81,30 @@
         placeholder="# Kms"
       />
     </div>
-    <div class="form-control">
+    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
       <label>Theme</label>
       <input type="text" v-model="theme" name="theme" placeholder="" />
     </div>
-    <div class="form-control">
+    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
       <label>Note</label>
       <input type="text" v-model="note" name="note" placeholder="Eg. Leader?" />
     </div>
-    <input type="submit" value="Save activity" class="btn btn-block" />
-
-    <CollapsableOptionSet
-      v-for="(oas, index) in oasOptions"
-      :key="index"
-      :sectionTitle="oas.area + ' ' + oas.stage"
-      :labelset="oas.requirements"
-      :selected="ican"
-      @update="(list) => onUpdate(index, list)"
+    <input
+      type="submit"
+      value="Save Activity"
+      :class="[isMobile() ? 'mobile_btn mobile_btn-block' : 'btn btn-block']"
     />
+
+    <div v-show="!this.isMobile()">
+      <CollapsableOptionSet
+        v-for="(oas, index) in oasOptions"
+        :key="index"
+        :sectionTitle="oas.area + ' ' + oas.stage"
+        :labelset="oas.requirements"
+        :selected="ican"
+        @update="(list) => onUpdate(index, list)"
+      />
+    </div>
   </form>
 </template>
 
@@ -148,8 +162,14 @@ export default {
     allowDelete: Boolean,
   },
   emits: ["update-activity", "delete-activity"],
-
   methods: {
+    isMobile() {
+      if (screen.width <= 760) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     onSubmit() {
       if (!this.type) {
         alert("Please select an activity type");
@@ -228,8 +248,15 @@ export default {
 .form-control {
   margin: 20px 25px 0 0;
 }
+.mob_form-control {
+  margin: 20px 25px 0 0;
+  font-size: 25px;
+}
 
 .form-control label {
+  display: flex;
+}
+.mob_form-control label {
   display: flex;
 }
 
@@ -239,6 +266,12 @@ export default {
   padding: 10px 7px;
   font-size: 17px;
 }
+.mob_form-control select {
+  height: 50px;
+  margin: 10px 0 0 0;
+  padding: 10px 7px;
+  font-size: 20px;
+}
 
 .form-control input {
   width: 100%;
@@ -246,6 +279,12 @@ export default {
   margin: 10px;
   padding: 10px 7px;
   font-size: 17px;
+}
+.mob_form-control input {
+  height: 40px;
+  margin: 10px;
+  padding: 10px 7px;
+  font-size: 20px;
 }
 
 .dropdown {

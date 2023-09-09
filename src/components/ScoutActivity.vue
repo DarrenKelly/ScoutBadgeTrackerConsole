@@ -2,19 +2,27 @@
   <div
     @click="onClick"
     :class="[
+      this.isMobile() ? 'mobile_list_element' : '',
       activity.date < new Date().toISOString().split('T')[0] ? 'past' : '',
       selected ? 'selected' : '',
-      'activity',
+      this.isMobile() ? 'mobile_activity' : 'activity',
     ]"
   >
-    <div class="title">
+    <div :class="[isMobile() ? 'mob_title' : 'title']">
       {{ activity.name }}
-      <p class="date">{{ activity.date }} {{ activity.location }}</p>
+
+      <p :class="[isMobile() ? 'mob_date' : 'date']">
+        {{ activity.date }} {{ activity.location }}
+      </p>
     </div>
-    <div class="midblock">
-      <ActivityIcon :icon_type="activity.type" :compact="true" />
+    <div :class="[this.isMobile() ? 'mobile_midblockl' : 'midblockl']">
+      <div v-show="!this.isMobile()">Rollcall attendees:</div>
+      ({{ activity.participants.length }})
     </div>
-    <div>
+    <div class="midblockr">
+      <ActivityIcon :icon_type="activity.type" :compact="!this.isMobile()" />
+    </div>
+    <div v-show="!this.isMobile()">
       <i class="type">{{ activity.type }}</i>
     </div>
   </div>
@@ -55,6 +63,13 @@ export default {
     "select-activity",
   ],
   methods: {
+    isMobile() {
+      if (screen.width <= 760) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     onClick() {
       console.log(
         "Clicked on Activity with Id " +
@@ -90,8 +105,16 @@ export default {
 .activity {
   background: #f4f4f4;
   display: grid;
-  grid-template-columns: auto auto 60px;
+  grid-template-columns: auto auto auto 60px;
   height: 60px;
+  margin: 5px;
+  padding: 10px 5px;
+}
+.mobile_activity {
+  background: #f4f4f4;
+  display: grid;
+  grid-template-columns: auto auto auto 60px;
+  height: 200px;
   margin: 5px;
   padding: 10px 5px;
 }
@@ -104,20 +127,29 @@ export default {
 .title {
   align-items: left;
 }
+.mob_title {
+  align-items: left;
+  font-size: 60px;
+}
 .type {
   font-size: 12px;
 }
 .date {
   font-size: 12px;
 }
-.icon {
-  width: 45px;
-  height: auto;
+.mob_date {
+  font-size: 30px;
 }
-.gone {
-  display: none;
+.mobile_midblockl {
+  margin-left: 5px;
+  margin-right: auto;
+  font-size: 25px;
 }
-.midblock {
+.midblockl {
+  margin-left: 10px;
+  margin-right: auto;
+}
+.midblockr {
   margin-left: auto;
   margin-right: 10px;
 }
