@@ -77,6 +77,7 @@ export default {
   padding-bottom: 2px;
 }
 .buttoncontainer {
+  align-items: center;
   display: inline-block;
   margin-left: auto;
   margin-right: auto;

@@ -24,7 +24,7 @@ export default {
 </script>
 <style scoped>
 .logo_container {
-  width: 90%;
+  margin-top: 50px;
 }
 .mob_container {
   object-fit: cover;

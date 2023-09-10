@@ -8,7 +8,7 @@
   </div>
   <div v-else>
     <NavigationMobile />
-    <div class="container">
+    <div class="mob_container">
       <router-view v-if="hasLoadedData" />
       <p v-else>Loading...</p>
     </div>
@@ -57,11 +57,18 @@ body {
 .container {
   /*max-width: 1080px;*/
   max-width: 100%;
-  margin: 15px auto;
+  margin: 100px auto;
   overflow: auto;
   min-height: 300px;
   border: 1px solid #622599;
   padding: 20px;
+  border-radius: 5px;
+}
+.mob_container {
+  max-width: 100%;
+  margin: 0 auto 160px auto;
+  overflow: auto;
+  border: 1px solid #622599;
   border-radius: 5px;
 }
 </style>
