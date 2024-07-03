@@ -9,11 +9,10 @@
     "ionic:build": "vue-cli-service build",
     "ionic:serve": "vue-cli-service serve"
   },
-
   "dependencies": {
     "@ionic/vue": "^7.3.3",
     "core-js": "^3.8.3",
-    "firebase": "^10.1.0",
+    "firebase": "^10.12.2",
     "firebaseui": "^5.0.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
@@ -25,7 +24,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@vue/cli-service": "^5.0.8",
     "babel-plugin-component": "^1.1.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",

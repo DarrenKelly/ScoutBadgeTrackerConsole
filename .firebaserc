@@ -1,7 +1,8 @@
 {
   "projects": {
-    "default": "scoutbadges-2g",
-    "prod": "scoutbadges-c1523"
+    "default": "scoutbadgestest",
+    "not-default": "scoutbadges-2g",
+    "test": "scoutbadgestest"
   },
   "targets": {},
   "etags": {}

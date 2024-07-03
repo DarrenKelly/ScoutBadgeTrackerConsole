@@ -71,6 +71,15 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/attendance",
+    name: "attendance",
+    component: () =>
+      import(
+        /* webpackChunkName: "attendance" */ "../views/AttendanceView.vue"
+      ),
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/about",
     name: "about",
     // route level code-splitting

@@ -50,9 +50,9 @@
       </thead>
       <tbody>
         <tr v-for="scout in filteredScouts" :key="scout.id" class="scout-row">
-          <tdF class="name-cell end-cell keeptogether">
+          <td class="name-cell end-cell keeptogether">
             {{ scout.preferredname }} {{ scout.familyname }}
-          </tdF>
+          </td>
 
           <td
             v-for="(value, index) in oasActivityAchievementMap.get(scout.id)
@@ -270,7 +270,11 @@ export default {
       let ui_ican = new Array();
       let index = 0;
       statuses.forEach((status) => {
-        if (status[0] && !status[1]) {
+        if (
+          status[0] &&
+          !status[1] &&
+          !ui_ican.includes(this.flatOasStatements[index])
+        ) {
           // UI says scout achieved this I can ... Statement
           // without attending a group activity.
           ui_ican.push(this.flatOasStatements[index]);

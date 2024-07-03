@@ -257,7 +257,7 @@ async function initialiseMembers() {
       dob: getISODate(doc.data().dob),
       joindate: getISODate(doc.data().joindate),
       membertype: doc.data().membertype,
-      ican: doc.data().ican,
+      ican: [...new Set(doc.data().ican)],
     };
     members.push(newMember);
   });
