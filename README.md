@@ -2,9 +2,9 @@
 
 Desktop application for ScoutBadgeTracker with Vue 3.
 Should have all the functionality as ScoutBadgeTracker with additional desktop features.
-ScoutBadgeTracker is intened as a mobile app. Its HTML and CSS are expected to diverge
-from ScoutBadgeTrackerConsole. At some point shared functionality will be refactored to
-a shared library.
+ScoutBadgeTracker was originally intened as the mobile app version of this system. In
+practice we now have just this app which adapts itself to mobile in part by hiding 
+desktop-only functionality.
 
 NOTES:
  Test using http://localhost:8080/ rather than the explicit IP address of the dev box - the latter will cause a log in error.
@@ -13,6 +13,11 @@ NOTES:
   firebase use scoutbadgestest
   npm run build
   firebase deploy --only hosting:scoutbadgestest
+
+  to switch between production and test:
+    swap the default and not-default values in .firebaserc
+    swap which of the Pruduction and Test blockes is commented out in firebaseInit.js (this is not uploaded to github as it contains login secrets) 
+    In main.css change the scoutpurple value between the production and test values.
 
 ## Recommended IDE Setup
 
@@ -31,7 +36,7 @@ npm install
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+npm run serve
 ```
 
 ### Compile and Minify for Production

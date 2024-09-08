@@ -122,6 +122,7 @@ async function writeActivity(activity) {
       console.log("Activity saved newActivityRef=" + newActivityRef.id);
       activity.id = newActivityRef.id;
     } catch (error) {
+      console.log("Unable to save the new activity. " + error);
       alert("Unable to save the new activity. " + error);
     }
   } else {
@@ -132,6 +133,9 @@ async function writeActivity(activity) {
       );
       console.log("Activity updated");
     } catch (error) {
+      console.log(
+        "Unable to update activity with ID=" + activity.id + ". " + error
+      );
       alert("Unable to update the activity. " + error);
     }
   }
