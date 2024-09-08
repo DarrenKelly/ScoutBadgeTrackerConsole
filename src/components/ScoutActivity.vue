@@ -17,7 +17,7 @@
     </div>
     <div :class="[this.isMobile() ? 'mobile_midblockl' : 'midblockl']">
       <div v-show="!this.isMobile()">Rollcall attendees:</div>
-      ({{ activity.participants.length }})
+      ({{ activity.participants.length }} inc. {{ countYouths }} youths )
     </div>
     <div class="midblockr">
       <ActivityIcon :icon_type="activity.type" :compact="!this.isMobile()" />
@@ -51,6 +51,13 @@ export default {
     activity: Object,
     allowEdit: Boolean,
     selected: Boolean,
+  },
+  computed: {
+    countYouths() {
+      return this.activity.participants.filter(
+        (item) => item.membertype === "Youth"
+      ).length;
+    },
   },
   components: {
     ActivityForm,

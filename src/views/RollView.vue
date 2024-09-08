@@ -29,6 +29,7 @@
       :enableEdit="false"
       :hideOldMembers="hideArchivedMembers"
     />
+    <RollFooter v-if="selectedActivityId != ''" @save-rollcall="saveRollcall" />
   </div>
 </template>
 
@@ -37,12 +38,14 @@ import MemberList from "@/components/MemberList";
 import ActivityList from "@/components/ActivityList";
 import ActivitiesHeader from "@/components/ActivitiesHeader";
 import RollHeader from "@/components/RollHeader";
+import RollFooter from "@/components/RollFooter";
 import { members, activities, writeActivity } from "@/firebase";
 
 export default {
   name: "RollView",
   components: {
     ActivitiesHeader,
+    RollFooter,
     RollHeader,
     MemberList,
     ActivityList,
@@ -100,15 +103,20 @@ export default {
       console.log("RollView cancelChanges()");
       this.selectedActivityId = "";
     },
-    changeParticipation(memberId, state) {
+    changeParticipation(memberId, state, adultOrYouth) {
       console.log(
-        "RollView changeParticipation( " + memberId + ", " + state + " )"
+        "RollView changeParticipation( " +
+          memberId +
+          ", " +
+          state +
+          ", " +
+          adultOrYouth +
+          " )"
       );
-      console.log("this.participants = " + this.participants);
       let participant = this.participants.find((a) => a.id == memberId);
       console.log("RollView changeParticipation participant = " + participant);
       if (participant == null) {
-        participant = { id: memberId, role: state };
+        participant = { id: memberId, role: state, membertype: adultOrYouth };
         console.log("New participant = " + participant);
         this.participants.push(participant);
       } else {

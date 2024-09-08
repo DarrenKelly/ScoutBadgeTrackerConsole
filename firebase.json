@@ -1,14 +1,9 @@
 {
   "hosting": {
-    "site": "scoutbadges-2g",
-    "notsite": "scoutbadgestest",
-    "oldproject": "scoutbadges-c1523",
+    "notsite": "scoutbadges-2g",
+    "site": "scoutbadgestest",
     "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
@@ -26,9 +21,7 @@
         "firebase-debug.log",
         "firebase-debug.*.log"
       ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint"
-      ]
+      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"]
     }
   ]
 }

@@ -2,9 +2,9 @@
   <header>
     <h1>Rollcall</h1>
     <StyledButton
-      @clicked="onCancelButtonClicked"
-      button_text="Cancel"
-      colour="red"
+      @clicked="onSaveButtonClicked"
+      button_text="Save"
+      colour="green"
     />
     <StyledButton
       @clicked="onArchivedButtonClicked"
@@ -12,9 +12,9 @@
       colour="blue"
     />
     <StyledButton
-      @clicked="onSaveButtonClicked"
-      button_text="Save"
-      colour="green"
+      @clicked="onCancelButtonClicked"
+      button_text="Cancel"
+      colour="red"
     />
   </header>
 </template>

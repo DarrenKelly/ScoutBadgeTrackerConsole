@@ -23,7 +23,7 @@
         ? 'blue-patrol'
         : member.patrol == 'Green'
         ? 'green-patrol'
-        : '',
+        : 'no-patrol',
     ]"
   >
     <div class="title">
@@ -108,7 +108,12 @@ export default {
             this.state = "";
             break;
         }
-        this.$emit("change-participation", this.member.id, this.state);
+        this.$emit(
+          "change-participation",
+          this.member.id,
+          this.state,
+          this.member.membertype
+        );
       }
     },
     updateMember(modifiedMember) {
@@ -170,21 +175,24 @@ export default {
   display: none;
 }
 .red-patrol {
-  border-right: 5pt solid #f0041f;
+  border-left: 5pt solid #f0041f;
 }
 .orange-patrol {
-  border-right: 5pt solid #f58206;
+  border-left: 5pt solid #f58206;
 }
 .purple-patrol {
-  border-right: 5pt solid #b522ff;
+  border-left: 5pt solid #b522ff;
 }
 .yellow-patrol {
-  border-right: 5pt solid #ecd901;
+  border-left: 5pt solid #ecd901;
 }
 .blue-patrol {
-  border-right: 5pt solid #3030ff;
+  border-left: 5pt solid #3030ff;
 }
 .green-patrol {
-  border-right: 5pt solid #14c704;
+  border-left: 5pt solid #14c704;
+}
+.no-patrol {
+  border-left: 5pt solid #aaaaaa;
 }
 </style>

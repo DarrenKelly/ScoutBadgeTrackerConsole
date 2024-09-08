@@ -54,11 +54,10 @@ export default {
       console.log("MemberList patrolNameSort()");
       return [...memberList].sort(patrolName);
     },
-    changeParticipation(memberId, state) {
-      this.$emit("change-participation", memberId, state);
+    changeParticipation(memberId, state, adultOrYouth) {
+      this.$emit("change-participation", memberId, state, adultOrYouth);
     },
     getInitialState(memberId) {
-      console.log("MemberList getInitialState(" + memberId + ")");
       if (this.participants == null) {
         return "";
       }
