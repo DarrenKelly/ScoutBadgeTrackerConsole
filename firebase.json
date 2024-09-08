@@ -1,6 +1,8 @@
 {
   "hosting": {
-    "site": "scoutbadgestest",
+    "site": "scoutbadges-2g",
+    "notsite": "scoutbadgestest",
+    "oldproject": "scoutbadges-c1523",
     "public": "dist",
     "ignore": [
       "firebase.json",

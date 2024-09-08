@@ -1,26 +1,46 @@
 <template>
-  <TheNavigation />
-  <div class="container">
-    <router-view v-if="hasLoadedData" />
-    <p v-else>Loading...</p>
+  <div v-if="!isMobile()">
+    <NavigationDesktop />
+    <div class="container">
+      <router-view v-if="hasLoadedData" />
+      <p v-else>Loading...</p>
+    </div>
+  </div>
+  <div v-else>
+    <NavigationMobile />
+    <div class="mob_container">
+      <router-view v-if="hasLoadedData" />
+      <p v-else>Loading...</p>
+    </div>
   </div>
 </template>
-
 <script>
-import TheNavigation from "@/components/TheNavigation.vue";
+import NavigationDesktop from "@/components/NavigationDesktop.vue";
+import NavigationMobile from "@/components/NavigationMobile.vue";
 import { initialise } from "./firebase";
 
 export default {
-  components: { TheNavigation },
+  name: "App",
+
+  components: { NavigationDesktop, NavigationMobile },
 
   data() {
     return { hasLoadedData: false };
+  },
+
+  methods: {
+    isMobile() {
+      if (screen.width <= 760) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   created() {
     initialise("darren");
     this.hasLoadedData = true;
   },
-  methods: {},
 };
 </script>
 
@@ -37,11 +57,18 @@ body {
 .container {
   /*max-width: 1080px;*/
   max-width: 100%;
-  margin: 15px auto;
+  margin: 100px auto;
   overflow: auto;
   min-height: 300px;
   border: 1px solid #622599;
   padding: 20px;
+  border-radius: 5px;
+}
+.mob_container {
+  max-width: 100%;
+  margin: 0 auto 160px auto;
+  overflow: auto;
+  border: 1px solid #622599;
   border-radius: 5px;
 }
 </style>

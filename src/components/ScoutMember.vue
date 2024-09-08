@@ -2,7 +2,7 @@
   <div
     @click="onClick"
     :class="[
-      'member',
+      this.isMobile() ? 'mobile_member' : 'member',
       member.archived ? 'archived' : '',
       state == 'Helping'
         ? 'helper'
@@ -80,6 +80,13 @@ export default {
   },
   emits: ["update-member", "delete-member", "change-participation"],
   methods: {
+    isMobile() {
+      if (screen.width <= 760) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     onClick() {
       console.log("Clicked on Member with Id " + this.member.id);
       if (this.enableEdit) {
@@ -128,6 +135,15 @@ export default {
   grid-template-columns: auto 60px;
   font-size: 20px;
   height: 2cm;
+  margin: 5px;
+  padding: 10px 5px;
+}
+.mobile_member {
+  background: #f4f4f4;
+  display: grid;
+  grid-template-columns: auto 60px;
+  font-size: 24pt;
+  height: 100px;
   margin: 5px;
   padding: 10px 5px;
 }

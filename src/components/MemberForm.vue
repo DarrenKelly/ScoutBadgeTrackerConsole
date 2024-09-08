@@ -173,7 +173,13 @@
       </div>
     </div>
 
-    <input type="submit" value="Save Member" class="btn btn-block" />
+    <input
+      type="submit"
+      value="Save Member"
+      :class="[
+        this.isMobile() ? 'mobile_btn  mobile_btn-block' : 'btn btn-block',
+      ]"
+    />
   </form>
 </template>
 
@@ -213,6 +219,13 @@ export default {
   },
   emits: ["update-member", "delete-member"],
   methods: {
+    isMobile() {
+      if (screen.width <= 760) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     onSubmit() {
       if (!this.membertype) {
         alert("Please select an member type");
@@ -338,7 +351,7 @@ export default {
 }
 .form-control input {
   width: 100%;
-  height: 20px;
+  height: auto;
   margin: 5px;
   padding: 3px 7px;
   font-size: 17px;
