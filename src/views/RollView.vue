@@ -12,6 +12,8 @@
       @save-rollcall="saveRollcall"
       @toggle-archived="toggleArchived"
       @cancel-changes="cancelChanges"
+      :sortByName="sortByName"
+      @toggle-sort="toggleSort"
     />
     <ActivityList
       @select-activity="selectActivity"
@@ -28,6 +30,7 @@
       :participants="participants"
       :enableEdit="false"
       :hideOldMembers="hideArchivedMembers"
+      :sortByName="sortByName"
     />
     <RollFooter v-if="selectedActivityId != ''" @save-rollcall="saveRollcall" />
   </div>
@@ -58,6 +61,7 @@ export default {
       membersdata: members,
       hideOldActivities: true,
       hideArchivedMembers: true,
+      sortByName: false,
     };
   },
   methods: {
@@ -126,6 +130,9 @@ export default {
           this.participants.splice(this.participants.indexOf(participant), 1);
         }
       }
+    },
+    toggleSort() {
+      this.sortByName = !this.sortByName;
     },
   },
   props: {},

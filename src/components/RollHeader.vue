@@ -2,6 +2,11 @@
   <header>
     <h1>Rollcall</h1>
     <StyledButton
+      @clicked="onSortButtonClicked"
+      :button_text="sortByName ? 'Patrols' : 'A->Z'"
+      :colour="sortByName ? 'purple' : 'teal'"
+    />
+    <StyledButton
       @clicked="onSaveButtonClicked"
       button_text="Save"
       colour="green"
@@ -26,8 +31,10 @@ export default {
   components: {
     StyledButton,
   },
-  props: {},
-  emits: ["save-rollcall", "cancel-changes"],
+  props: {
+    sortByName: Boolean,
+  },
+  emits: ["save-rollcall", "cancel-changes", "toggle-sort"],
   methods: {
     onCancelButtonClicked() {
       console.log("Rollcall Canceled");
@@ -40,6 +47,9 @@ export default {
     onSaveButtonClicked() {
       console.log("Rollcall Saving");
       this.$emit("save-rollcall");
+    },
+    onSortButtonClicked() {
+      this.$emit("toggle-sort");
     },
   },
 };
