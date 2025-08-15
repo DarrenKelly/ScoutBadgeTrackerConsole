@@ -1,9 +1,14 @@
 <template>
-  <div class="milestones">
-    <div class="header">
+  <div class="oas">
+    <div class="controls">
       <form id="filter">
         Filter <input name="query" v-model="filterText" />
       </form>
+      <StyledButton
+        @click="toggleArchived"
+        :colour="showArchived ? 'purple' : 'teal'"
+        :button_text="showArchived ? 'Hide Archived' : 'Show Archived'"
+      />
     </div>
     <!-- component template -->
     <table class="oas-table">
@@ -75,6 +80,7 @@
 </template>
 
 <script>
+import StyledButton from "@/components/widgets/StyledButton";
 import { ref, computed } from "vue";
 import { members, writeMember, activities } from "@/firebase";
 import { oasStatements, allOasStatements } from "@/scouting";
@@ -181,23 +187,43 @@ function arrayContentMatches(array1, array2) {
 
 export default {
   name: "OasView",
-  components: {},
+  components: { StyledButton },
   setup() {
     const filterText = ref("");
+    const showArchived = ref(false);
+
     const filteredScouts = computed(() => {
-      let filter = filterText.value;
-      if (!filter.length) {
-        console.log("No Filter");
-        return members.filter(function (s) {
-          return !s.archived;
-        });
+      let scoutsToFilter = members;
+
+      // 1. Filter by archived status
+      if (!showArchived.value) {
+        scoutsToFilter = scoutsToFilter.filter((scout) => !scout.archived);
       }
-      console.log("Filter=" + filter);
-      return members.filter((scout) => filterScoutName(scout, filter));
+
+      // 2. Filter by text
+      const filter = filterText.value;
+      if (filter.length) {
+        scoutsToFilter = scoutsToFilter.filter((scout) =>
+          filterScoutName(scout, filter)
+        );
+      }
+
+      return scoutsToFilter.sort((a, b) => {
+        const nameA = `${a.preferredname} ${a.familyname}`.toLowerCase();
+        const nameB = `${b.preferredname} ${b.familyname}`.toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
     });
+
+    function toggleArchived() {
+      showArchived.value = !showArchived.value;
+    }
+
     return {
       filterText,
       filteredScouts,
+      showArchived,
+      toggleArchived,
     };
   },
   data: function () {
@@ -306,6 +332,12 @@ export default {
 </script>
 
 <style scoped>
+.controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
 .category-row {
   font-size: 20px;
   font-weight: bold;

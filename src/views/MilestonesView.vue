@@ -1,9 +1,14 @@
 <template>
   <div class="milestones">
-    <div>
+    <div class="controls">
       <form id="filter">
         Filter <input name="query" v-model="filterText" />
       </form>
+      <StyledButton
+        @click="toggleArchived"
+        :colour="showArchived ? 'purple' : 'teal'"
+        :button_text="showArchived ? 'Hide Archived' : 'Show Archived'"
+      />
     </div>
     <!-- component template -->
     <table class="ms-table">
@@ -72,6 +77,21 @@
 </template>
 
 <style scoped>
+.controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+.styled-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff;
+  cursor: pointer;
+}
 .ms-header {
   font-size: 20px;
   font-weight: bold;
@@ -79,6 +99,9 @@
   padding-right: 12px;
   background-color: #eee;
   color: black;
+}
+.styled-button.show-archived {
+  background-color: #c82333;
 }
 .ms-table {
   border-radius: 3px;
@@ -132,6 +155,7 @@ td {
 </style>
 
 <script>
+import StyledButton from "@/components/widgets/StyledButton";
 import { ref, computed } from "vue";
 import { members, activities } from "@/firebase";
 import {
@@ -141,82 +165,81 @@ import {
 } from "@/milestoneRules";
 
 export default {
+  components: {
+    StyledButton,
+  },
   name: "MilestonesView",
   setup() {
     const filterText = ref("");
+    const showArchived = ref(false);
+
+    const goals = [
+      {
+        participate: 6 * 4, // 6 activities from each of the 4 Challenge Areas
+        assist: 2,
+        lead: 1,
+      },
+      {
+        participate: 5 * 4, // 5 activities from each of the 4 Challenge Areas
+        assist: 3,
+        lead: 2,
+      },
+      {
+        participate: 4 * 4, // 4 activities from each of the 4 Challenge Areas
+        assist: 4,
+        lead: 4,
+      },
+    ];
+
     const filteredScouts = computed(() => {
-      let filter = filterText.value;
-      if (!filter.length) {
-        console.log("No Filter");
-        return members;
+      let scoutsToFilter = members;
+
+      // 1. Filter by archived status
+      if (!showArchived.value) {
+        scoutsToFilter = scoutsToFilter.filter((scout) => !scout.archived);
       }
-      console.log("Filter=" + filter);
-      return members.filter((scout) =>
-        (scout.preferredname + " " + scout.familyname)
-          .toLowerCase()
-          .includes(filter.toLowerCase())
-      );
+
+      // 2. Filter by text
+      const filter = filterText.value.toLowerCase();
+      if (filter.length) {
+        scoutsToFilter = scoutsToFilter.filter((scout) =>
+          (scout.preferredname + " " + scout.familyname)
+            .toLowerCase()
+            .includes(filter)
+        );
+      }
+
+      // 3. Sort by name
+      return scoutsToFilter.sort((a, b) => {
+        const nameA = `${a.preferredname} ${a.familyname}`.toLowerCase();
+        const nameB = `${b.preferredname} ${b.familyname}`.toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
     });
-    return {
-      members,
-      filterText,
-      filteredScouts,
-    };
-  },
-  data: function () {
-    return {
-      filterKey: "",
-      scouts: members,
-      goals: [
-        {
-          participate: 6 * 4, // 6 activities from each of the 4 Challenge Areas
-          assist: 2,
-          lead: 1,
-        },
-        {
-          participate: 5 * 4, // 5 activities from each of the 4 Challenge Areas
-          assist: 3,
-          lead: 2,
-        },
-        {
-          participate: 4 * 4, // 4 activities from each of the 4 Challenge Areas
-          assist: 4,
-          lead: 4,
-        },
-      ],
-    };
-  },
-  computed: {
-    goalValues() {
+
+    const goalValues = computed(() => {
       return [
-        this.goals[0].participate,
-        this.goals[0].assist,
-        this.goals[0].lead,
-        this.goals[1].participate,
-        this.goals[1].assist,
-        this.goals[1].lead,
-        this.goals[2].participate,
-        this.goals[2].assist,
-        this.goals[2].lead,
+        goals[0].participate,
+        goals[0].assist,
+        goals[0].lead,
+        goals[1].participate,
+        goals[1].assist,
+        goals[1].lead,
+        goals[2].participate,
+        goals[2].assist,
+        goals[2].lead,
         100,
         100,
         100,
         100,
       ];
-    },
-  },
-  methods: {
-    mileStoneChallengesMet(scout, type, milestone) {
-      console.log(
-        "mileStoneChallengesMet(" +
-          JSON.stringify(scout) +
-          "," +
-          type +
-          "," +
-          milestone +
-          ")"
-      );
+    });
 
+    function toggleArchived() {
+      showArchived.value = !showArchived.value;
+    }
+
+    function mileStoneChallengesMet(scout, type, milestone) {
       switch (type) {
         case "Participate":
           return milestoneParticipate(scout, activities, 7 - milestone);
@@ -225,36 +248,37 @@ export default {
           return milestoneAssist(scout, activities, milestone + 1);
 
         case "Lead":
-          if (milestone == 1) {
+          if (milestone === 1) {
             return milestoneLead(scout, activities, 1);
-          } else if (milestone == 2) {
+          } else if (milestone === 2) {
             return milestoneLead(scout, activities, 2);
           }
           return milestoneLead(scout, activities, 4);
       }
       return false;
-    },
+    }
+
     // Return an array with the number of activites in each
     // cell for a given scout
-    getMilestoneRow: function (scout) {
+    function getMilestoneRow(scout) {
       var participations = 0;
       var assists = 0;
       var leads = 0;
 
       // @todo: This is O(n2) when it could be done O(n)
-      activities.forEach(function (ev) {
+      activities.forEach((ev) => {
         if (ev.participants) {
-          ev.participants.forEach(function (participant) {
-            if (scout.id == participant.id) {
+          ev.participants.forEach((participant) => {
+            if (scout.id === participant.id) {
               switch (participant.role) {
                 case "Leader":
-                  leads = leads + 1;
+                  leads++;
                   break;
                 case "Helping":
-                  assists = assists + 1;
+                  assists++;
                   break;
                 default:
-                  participations = participations + 1;
+                  participations++;
               }
             }
           });
@@ -263,35 +287,42 @@ export default {
 
       let retVal = [];
       for (let milestone = 0; milestone < 3; milestone++) {
-        if (
-          participations <= this.goals[milestone].participate ||
-          milestone == 2
-        ) {
+        if (participations <= goals[milestone].participate || milestone === 2) {
           retVal.push(participations);
           participations = 0;
         } else {
-          retVal.push(this.goals[milestone].participate);
-          participations = participations - this.goals[milestone].participate;
+          retVal.push(goals[milestone].participate);
+          participations -= goals[milestone].participate;
         }
 
-        if (assists <= this.goals[milestone].assist || milestone == 2) {
+        if (assists <= goals[milestone].assist || milestone === 2) {
           retVal.push(assists);
           assists = 0;
         } else {
-          retVal.push(this.goals[milestone].assist);
-          assists = assists - this.goals[milestone].assist;
+          retVal.push(goals[milestone].assist);
+          assists -= goals[milestone].assist;
         }
 
-        if (leads <= this.goals[milestone].lead || milestone == 2) {
+        if (leads <= goals[milestone].lead || milestone === 2) {
           retVal.push(leads);
           leads = 0;
         } else {
-          retVal.push(this.goals[milestone].lead);
-          leads = leads - this.goals[milestone].lead;
+          retVal.push(goals[milestone].lead);
+          leads -= goals[milestone].lead;
         }
       }
       return retVal;
-    },
+    }
+
+    return {
+      filterText,
+      filteredScouts,
+      goalValues,
+      getMilestoneRow,
+      mileStoneChallengesMet,
+      showArchived,
+      toggleArchived,
+    };
   },
 };
 </script>
