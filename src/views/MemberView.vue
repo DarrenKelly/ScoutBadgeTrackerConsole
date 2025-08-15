@@ -5,6 +5,8 @@
       @filter-old-members="filterOldMembers"
       :showForm="showForm"
       :hideOldMembers="hideOldMembers"
+      :sortByName="sortByName"
+      @toggle-sort="toggleSort"
     />
     <div v-if="showForm">
       <MemberForm
@@ -19,6 +21,7 @@
       :members="membersdata"
       :enableEdit="true"
       :hideOldMembers="hideOldMembers"
+      :sortByName="sortByName"
     />
   </div>
 </template>
@@ -41,6 +44,7 @@ export default {
       membersdata: members,
       hideOldMembers: true,
       showForm: false,
+      sortByName: false,
       prefill: {
         id: null,
         preferredname: null,
@@ -64,6 +68,7 @@ export default {
       },
     };
   },
+  // Use sortedMembers in your template instead of members
   methods: {
     addNewMember(newMember) {
       console.log("MemberView onAddMember()");
@@ -123,6 +128,9 @@ export default {
     toggleAddMemberForm() {
       console.log("MemberView toggleAddMemberForm()");
       this.showForm = !this.showForm;
+    },
+    toggleSort() {
+      this.sortByName = !this.sortByName;
     },
   },
   props: {},

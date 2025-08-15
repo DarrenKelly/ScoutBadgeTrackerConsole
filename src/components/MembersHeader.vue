@@ -2,6 +2,11 @@
   <header>
     <h1>Members</h1>
     <StyledButton
+      @clicked="onSortButtonClicked"
+      :button_text="sortByName ? 'Patrols' : 'A->Z'"
+      colour="sortByName ? 'purple' : 'teal'"
+    />
+    <StyledButton
       @clicked="onFormButtonClicked"
       :button_text="showForm ? 'Cancel' : 'Add Member'"
       :colour="showForm ? 'red' : 'green'"
@@ -24,8 +29,9 @@ export default {
   props: {
     hideOldMembers: Boolean,
     showForm: Boolean,
+    sortByName: Boolean,
   },
-  emits: ["show-add-member-form", "filter-old-members"],
+  emits: ["show-add-member-form", "filter-old-members", "toggle-sort"],
   methods: {
     onFormButtonClicked() {
       console.log("showForm=" + this.showForm);
@@ -33,6 +39,9 @@ export default {
     },
     onFilterButtonClicked() {
       this.$emit("filter-old-members");
+    },
+    onSortButtonClicked() {
+      this.$emit("toggle-sort");
     },
   },
 };

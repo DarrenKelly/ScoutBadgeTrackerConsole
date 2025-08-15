@@ -1,5 +1,5 @@
 <template>
-  <div v-for="member in patrolNameSort(members)" :key="member.id">
+  <div v-for="member in sortedMembers" :key="member.id">
     <ScoutMember
       :enableEdit="enableEdit"
       :member="member"
@@ -15,20 +15,6 @@
 <script>
 import ScoutMember from "./ScoutMember";
 
-function patrolName(a, b) {
-  if (typeof a.patrol !== "undefined" && typeof b.patrol == "undefined")
-    return -1;
-  if (typeof a.patrol == "undefined" && typeof b.patrol !== "undefined")
-    return 1;
-  if (a.patrol < b.patrol) return -1;
-  if (a.patrol > b.patrol) return 1;
-  if (a.preferredname < b.preferredname) return -1;
-  if (a.preferredname > b.preferredname) return 1;
-  if (a.familyname < b.familyname) return -1;
-  if (a.familyname > b.familyname) return 1;
-  return 0;
-}
-
 export default {
   name: "MemberList",
   props: {
@@ -36,6 +22,31 @@ export default {
     participants: Array,
     hideOldMembers: Boolean,
     enableEdit: Boolean,
+    sortByName: Boolean,
+  },
+  computed: {
+    // In MemberList.vue (computed property)
+    sortedMembers() {
+      if (!this.members) return [];
+      if (this.sortByName) {
+        return [...this.members].sort((a, b) => {
+          const nameA = a.preferredname || "";
+          const nameB = b.preferredname || "";
+          return nameA.localeCompare(nameB);
+        });
+      } else {
+        return [...this.members].sort((a, b) => {
+          const patrolA = a.patrol || "";
+          const patrolB = b.patrol || "";
+          if (patrolA === patrolB) {
+            const nameA = a.preferredname || "";
+            const nameB = b.preferredname || "";
+            return nameA.localeCompare(nameB);
+          }
+          return patrolA.localeCompare(patrolB);
+        });
+      }
+    },
   },
   components: {
     ScoutMember,
@@ -49,10 +60,6 @@ export default {
     deleteMember(memberId) {
       console.log("MemberList deleteMember with Id " + memberId);
       this.$emit("delete-member", memberId);
-    },
-    patrolNameSort(memberList) {
-      console.log("MemberList patrolNameSort()");
-      return [...memberList].sort(patrolName);
     },
     changeParticipation(memberId, state, adultOrYouth) {
       this.$emit("change-participation", memberId, state, adultOrYouth);
