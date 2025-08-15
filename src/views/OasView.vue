@@ -1,5 +1,5 @@
 <template>
-  <div class="oas">
+  <div class="oas-view">
     <div class="controls">
       <form id="filter">
         Filter <input name="query" v-model="filterText" />
@@ -36,7 +36,7 @@
         </tr>
         <tr class="statements-row">
           <th
-            v-for="(i_can_text, index) in this.flatOasStatements"
+            v-for="(i_can_text, index) in flatOasStatements"
             :key="index"
             :class="['statements', index % 2 == 0 ? 'c1' : 'c2']"
           >
@@ -45,7 +45,7 @@
         </tr>
         <tr class="percentage-row">
           <th
-            v-for="(i_can_text, index) in this.flatOasStatements"
+            v-for="(i_can_text, index) in flatOasStatements"
             :key="index"
             :class="['percentage', index % 2 == 0 ? 'c1' : 'c2']"
           >
@@ -64,12 +64,9 @@
               .oasAchievements"
             :key="index"
             :class="[index % 2 == 0 ? 'c1' : 'c2']"
-            v-bind="value[0]"
           >
             <button
-              @click="
-                (...args) => onManualChange(index, scout, value[0], value[1])
-              "
+              @click="() => onManualChange(index, scout, value[1])"
               :class="[value[0] ? 'cell-yes' : 'cell-no']"
             ></button>
           </td>
@@ -81,78 +78,56 @@
 
 <script>
 import StyledButton from "@/components/widgets/StyledButton";
-import { ref, computed } from "vue";
+import { ref, computed, reactive, onBeforeUnmount } from "vue";
 import { members, writeMember, activities } from "@/firebase";
 import { oasStatements, allOasStatements } from "@/scouting";
+/**
+ * Processes all activities to create a map of OAS achievements for each scout.
+ * This is more performant than the previous implementation.
+ * @returns {Map<string, {scout: object, oasAchievements: [boolean, boolean][]}>}
+ */
+function processAllActivityAchievements() {
+  // 1. Create a map of: statementText -> Set of scout IDs who achieved it via an activity
+  const statementToScoutIds = new Map();
+  allOasStatements.forEach((statement) =>
+    statementToScoutIds.set(statement, new Set())
+  );
 
-// Get a mapping from scouts to OAS "I Can ..." statements that
-// they have achieved by either by dint of attending an activity,
-// or by having been manually marked as having achieved it.
-//
-// returns a map  (S) -> {scout:scout_s, oasAchievements:[[O1,A1], [O2,A2], [O3,A4] ...]}
-// Where:
-// S is a scout ID
-// scout_s is the scout structure for the scout with this ID
-// Ox is true iff the scout has achieved OAS statement x
-// Ax is true if this was by dint of attending an activity.
-function allActivityAchievements(retVal) {
-  // First, build a map from "I can ..." statements to activities
-  let iCanActivities = new Map();
-  activities.forEach((act) => {
-    act.ican.forEach((ican) => {
-      if (iCanActivities.has(ican)) {
-        let arr = iCanActivities.get(ican);
-        arr.push(act);
-        iCanActivities.set(ican, arr);
-      } else {
-        let arr = new Array();
-        arr.push(act);
-        iCanActivities.set(ican, arr);
-      }
-    });
-  });
-
-  members.forEach((scout_o) => {
-    retVal.set(scout_o.id, { scout: scout_o, oasAchievements: [] });
-  });
-
-  let statement_count = 0;
-  // For each "I can ..." statement look at the
-  // related activities and mark all attending
-  // scouts as having achieved the statement.
-  allOasStatements.forEach((text) => {
-    if (iCanActivities.has(text)) {
-      iCanActivities.get(text).forEach((act) => {
-        act.participants.forEach((scout) => {
-          if (retVal.has(scout.id)) {
-            // First 'true' is for scout having achieved the statement.
-            // Second one indicates that it is due to them having
-            // attended an activity and is not, therefore, mutable.
-            retVal.get(scout.id).oasAchievements.push([true, true]);
-          }
-        });
+  activities.forEach((activity) => {
+    if (activity.ican) {
+      activity.ican.forEach((statementText) => {
+        if (activity.participants) {
+          activity.participants.forEach((participant) => {
+            if (statementToScoutIds.has(statementText)) {
+              statementToScoutIds.get(statementText).add(participant.id);
+            }
+          });
+        }
       });
     }
-    // scouts that were not at this activity
-    retVal.forEach((arr) => {
-      // if arr.length = count, it means we did not just add
-      //  a [true,true] for this OAS Statement.
+  });
 
-      if (arr.oasAchievements.length == statement_count) {
-        // For each "I can ..." statement look at
-        // this scout's manual OAS statemets and
-        // mark it as true if presant, false otherwise
-        if (arr.scout.ican == undefined) {
-          arr.oasAchievements.push([false, false]);
-        } else {
-          arr.oasAchievements.push([arr.scout.ican.includes(text), false]);
-        }
-      }
+  // 2. Create the final map for the view
+  const achievementMap = new Map();
+  members.forEach((scout) => {
+    const scoutAchievements = allOasStatements.map((statementText) => {
+      const achievedByActivity = statementToScoutIds
+        .get(statementText)
+        .has(scout.id);
+      const achievedManually = scout.ican
+        ? scout.ican.includes(statementText)
+        : false;
+
+      return [achievedByActivity || achievedManually, achievedByActivity];
     });
 
-    statement_count = statement_count + 1;
+    achievementMap.set(scout.id, {
+      scout: scout,
+      oasAchievements: scoutAchievements,
+    });
   });
-  return retVal;
+
+  return achievementMap;
 }
 
 function filterScoutName(scout, filter) {
@@ -189,9 +164,23 @@ export default {
   name: "OasView",
   components: { StyledButton },
   setup() {
+    // --- STATE ---
     const filterText = ref("");
     const showArchived = ref(false);
+    const oasActivityAchievementMap = reactive(new Map());
 
+    // --- CONSTANTS ---
+    // These are imported and don't need to be reactive
+    const myStatements = oasStatements;
+    const flatOasStatements = allOasStatements;
+
+    // --- DATA PROCESSING ---
+    const processedAchievements = processAllActivityAchievements();
+    processedAchievements.forEach((value, key) => {
+      oasActivityAchievementMap.set(key, value);
+    });
+
+    // --- COMPUTED ---
     const filteredScouts = computed(() => {
       let scoutsToFilter = members;
 
@@ -208,6 +197,7 @@ export default {
         );
       }
 
+      // 3. Sort by name
       return scoutsToFilter.sort((a, b) => {
         const nameA = `${a.preferredname} ${a.familyname}`.toLowerCase();
         const nameB = `${b.preferredname} ${b.familyname}`.toLowerCase();
@@ -215,57 +205,46 @@ export default {
       });
     });
 
+    // --- METHODS ---
+    function get_percentage(statementIndex) {
+      let count = 0;
+      if (filteredScouts.value.length === 0) {
+        return 0;
+      }
+
+      filteredScouts.value.forEach((scout) => {
+        const achievementData = oasActivityAchievementMap.get(scout.id);
+        if (
+          achievementData &&
+          achievementData.oasAchievements[statementIndex][0]
+        ) {
+          count++;
+        }
+      });
+      return Math.round((100 * count) / filteredScouts.value.length);
+    }
+
     function toggleArchived() {
       showArchived.value = !showArchived.value;
     }
 
-    return {
-      filterText,
-      filteredScouts,
-      showArchived,
-      toggleArchived,
-    };
-  },
-  data: function () {
-    return {
-      filterKey: "",
-      myStatements: oasStatements,
-      flatOasStatements: allOasStatements,
-      oasActivityAchievementMap: new Map(),
-    };
-  },
-  created() {
-    allActivityAchievements(this.oasActivityAchievementMap);
-  },
-  methods: {
-    get_percentage: function (statementIndex) {
-      let count = 0;
-      members.forEach((scout) => {
-        if (
-          this.oasActivityAchievementMap.get(scout.id).oasAchievements[
-            statementIndex
-          ][0]
-        ) {
-          count = count + 1;
-        }
-      });
-      return Math.round((100 * count) / this.oasActivityAchievementMap.size);
-    },
-    onManualChange(statementIndex, scout, oldValue, earnedByActivity) {
+    function onManualChange(statementIndex, scout, earnedByActivity) {
       if (!earnedByActivity) {
-        this.oasActivityAchievementMap.get(scout.id).oasAchievements[
-          statementIndex
-        ][0] = !oldValue;
+        const achievement = oasActivityAchievementMap.get(scout.id)
+          .oasAchievements[statementIndex];
+        achievement[0] = !achievement[0];
       }
-    },
-    countAll(statementSet) {
+    }
+
+    function countAll(statementSet) {
       let count = 0;
       statementSet.requirements.forEach((el) => {
-        count = count + el.statements.length;
+        count += el.statements.length;
       });
       return count;
-    },
-    pdrColCount(statementSet) {
+    }
+
+    function pdrColCount(statementSet) {
       let retVal = [];
       statementSet.forEach((set) => {
         set.requirements.forEach((el) => {
@@ -273,60 +252,55 @@ export default {
         });
       });
       return retVal;
-    },
-  },
-  beforeCreate() {
-    console.log("OasView beforeCreate()");
-  },
-  beforeMount() {
-    console.log("OasView beforeMount()");
-  },
-  mounted() {
-    console.log("OasView mounted()");
-  },
-  beforeUnmount() {
-    console.log("OasView beforeUnmount()");
-    // Need to check if any of the individual scout's achievements need to be updated.
+    }
 
-    members.forEach((scout) => {
-      // for this scout, construct a list of individual achievements per the UI
-      let statuses = this.oasActivityAchievementMap.get(
-        scout.id
-      ).oasAchievements;
-      let ui_ican = new Array();
-      let index = 0;
-      statuses.forEach((status) => {
-        if (
-          status[0] &&
-          !status[1] &&
-          !ui_ican.includes(this.flatOasStatements[index])
-        ) {
-          // UI says scout achieved this I can ... Statement
-          // without attending a group activity.
-          ui_ican.push(this.flatOasStatements[index]);
+    // --- LIFECYCLE HOOKS ---
+    onBeforeUnmount(() => {
+      console.log("OasView onBeforeUnmount()");
+      // Need to check if any of the individual scout's achievements need to be updated.
+      members.forEach((scout) => {
+        // for this scout, construct a list of individual achievements per the UI
+        let statuses = oasActivityAchievementMap.get(scout.id).oasAchievements;
+        let ui_ican = [];
+        let index = 0;
+        statuses.forEach((status) => {
+          if (
+            status[0] &&
+            !status[1] &&
+            !ui_ican.includes(flatOasStatements[index])
+          ) {
+            // UI says scout achieved this I can ... Statement
+            // without attending a group activity.
+            ui_ican.push(flatOasStatements[index]);
+          }
+          index++;
+        });
+
+        if (!arrayContentMatches(scout.ican, ui_ican)) {
+          // Some element of the OAS statements for this scout has changed
+          if (ui_ican.length === 0) {
+            scout.ican = undefined;
+          } else {
+            scout.ican = ui_ican;
+          }
+          writeMember(scout);
         }
-        index = index + 1;
       });
-
-      if (!arrayContentMatches(scout.ican, ui_ican)) {
-        // Some element of the OAS statements for this scout has changed
-        if (ui_ican.length == 0) {
-          scout.ican = undefined;
-        } else {
-          scout.ican = ui_ican;
-        }
-        writeMember(scout);
-      }
     });
-  },
-  unmounted() {
-    console.log("OasView unmounted()");
-  },
-  beforeUpdate() {
-    console.log("OasView beforeUpdate()");
-  },
-  unpdate() {
-    console.log("OasView unpdate()");
+
+    return {
+      filterText,
+      showArchived,
+      toggleArchived,
+      filteredScouts,
+      myStatements,
+      flatOasStatements,
+      oasActivityAchievementMap,
+      get_percentage,
+      onManualChange,
+      countAll,
+      pdrColCount,
+    };
   },
 };
 </script>
