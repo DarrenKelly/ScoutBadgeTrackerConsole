@@ -1,5 +1,5 @@
 <template>
-  <div v-for="activity in activities" :key="activity.id">
+  <div v-for="activity in sortedActivities" :key="activity.id">
     <ScoutActivity
       @update-activity="updateActivity"
       @delete-activity="deleteActivity"
@@ -36,6 +36,11 @@ export default {
     "deselect-activity",
     "select-activity",
   ],
+  computed: {
+    sortedActivities() {
+      return [...this.activities].sort((a, b) => (a.date > b.date ? -1 : 1));
+    },
+  },
   methods: {
     isOld(s) {
       // We're often interested in recent activites

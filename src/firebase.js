@@ -197,6 +197,12 @@ async function initialiseActivities() {
     console.error("Error returned by server:" + err);
   });
 
+  if (!querySnapshot) {
+    console.warn(
+      "querySnapshot is undefined, likely due to an error.  Check permissions and network connectivity."
+    );
+    return;
+  }
   activities.length = 0;
   querySnapshot.forEach((doc) => {
     let newActivity = {
