@@ -4,7 +4,7 @@
     <StyledButton
       @clicked="onSortButtonClicked"
       :button_text="sortByName ? 'Patrols' : 'A->Z'"
-      colour="sortByName ? 'purple' : 'teal'"
+      :colour="sortByName ? 'purple' : 'teal'"
     />
     <StyledButton
       @clicked="onFormButtonClicked"
