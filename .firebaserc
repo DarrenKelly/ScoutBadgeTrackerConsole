@@ -1,9 +1,23 @@
 {
   "projects": {
-    "default": "scoutbadgestest",
-    "not-default": "scoutbadges-2g",
+    "production": "scoutbadges-c1523",
     "test": "scoutbadgestest"
   },
-  "targets": {},
+  "targets": {
+    "scoutbadgestest": {
+      "hosting": {
+        "test": [
+          "scoutbadgestest"
+        ]
+      }
+    },
+    "scoutbadges-c1523": {
+      "hosting": {
+        "production": [
+          "scoutbadges-2g"
+        ]
+      }
+    }
+  },
   "etags": {}
 }

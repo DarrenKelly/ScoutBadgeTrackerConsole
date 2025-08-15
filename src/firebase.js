@@ -65,6 +65,7 @@ function googlePopupLogin() {
     })
     .catch((error) => {
       console.error("Google Login error:" + error.errorMessage);
+      console.error("Google Login error:", error);
     });
 }
 

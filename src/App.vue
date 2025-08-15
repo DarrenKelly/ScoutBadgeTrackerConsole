@@ -22,6 +22,12 @@ import { initialise } from "./firebase";
 export default {
   name: "App",
 
+  computed: {
+    backgroundColor() {
+      return process.env.VUE_APP_BACKGROUND_COLOR || "#fff";
+    },
+  },
+
   components: { NavigationDesktop, NavigationMobile },
 
   data() {
@@ -70,5 +76,9 @@ body {
   overflow: auto;
   border: 1px solid #622599;
   border-radius: 5px;
+}
+
+#app {
+  background-color: v-bind(backgroundColor);
 }
 </style>
