@@ -194,12 +194,17 @@ export default {
     const filteredScouts = computed(() => {
       let scoutsToFilter = members;
 
-      // 1. Filter by archived status
+      // 1. Filter for Youth members only
+      scoutsToFilter = scoutsToFilter.filter(
+        (scout) => scout.membertype === "Youth"
+      );
+
+      // 2. Filter by archived status
       if (!showArchived.value) {
         scoutsToFilter = scoutsToFilter.filter((scout) => !scout.archived);
       }
 
-      // 2. Filter by text
+      // 3. Filter by text
       const filter = filterText.value.toLowerCase();
       if (filter.length) {
         scoutsToFilter = scoutsToFilter.filter((scout) =>
@@ -209,7 +214,7 @@ export default {
         );
       }
 
-      // 3. Sort by name
+      // 4. Sort by name
       return scoutsToFilter.sort((a, b) => {
         const nameA = `${a.preferredname} ${a.familyname}`.toLowerCase();
         const nameB = `${b.preferredname} ${b.familyname}`.toLowerCase();
