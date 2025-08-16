@@ -178,7 +178,7 @@ async function initialiseConfig(user) {
   return config;
 }
 
-// We don't ewant to load  activities looking back to all time.
+// We don't ewant to load activities looking back to all time.
 // Use this constant to define how many months of old activities
 // the app should load by default.
 const DEFAULT_LOOKBACK_MONTHS = 12;
@@ -214,7 +214,7 @@ async function initialiseActivities() {
       date: doc.data().date,
       duration: doc.data().duration,
       location: doc.data().location,
-      hikekms: doc.data().hikekms,
+      hikeKms: doc.data().hikeKms,
       theme: doc.data().theme,
       note: doc.data().note,
       participants: doc.data().participants,
