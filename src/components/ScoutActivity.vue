@@ -17,7 +17,7 @@
     </div>
     <div :class="[this.isMobile() ? 'mobile_midblockl' : 'midblockl']">
       <div v-show="!this.isMobile()">Rollcall attendees:</div>
-      ({{ activity.participants.length }} inc. {{ countYouths }} youths )
+      ({{ activity.participants.length }} inc. {{ countYouths }} youths)
     </div>
     <div class="midblockr">
       <ActivityIcon :icon_type="activity.type" :compact="!this.isMobile()" />

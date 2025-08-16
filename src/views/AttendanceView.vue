@@ -6,7 +6,7 @@
         <tr class="activity-row">
           <th>Scout</th>
           <th
-            v-for="(activity, index) in this.activities"
+            v-for="(activity, index) in activities"
             :key="index"
             :class="['activity', index % 2 == 0 ? 'c1' : 'c2']"
           >
@@ -15,97 +15,84 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="scout in members" :key="scout.id" class="scout-row">
+        <tr v-for="scout in activeMembers" :key="scout.id" class="scout-row">
           <td class="name-cell end-cell keeptogether">
             {{ scout.preferredname }} {{ scout.familyname }}
           </td>
 
           <td
-            v-for="(value, index) in activityAttendanceMap.get(scout.id)"
+            v-for="(role, index) in activityAttendanceMap.get(scout.id) || []"
             :key="index"
             :class="[index % 2 == 0 ? 'c1' : 'c2']"
-            v-bind="value"
           >
-            <button :class="[value ? 'cell-yes' : 'cell-no']"></button>
+            {{ getRoleIcon(role) }}
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-
 <script>
+import { computed } from "vue";
 import { members, activities } from "@/firebase";
-
-function buildParticipantMap() {
-  const participantMap = new Map();
-
-  activities.forEach((activity) => {
-    activity.participants.forEach((participant) => {
-      const participantId = participant.id || ""; // Get participant ID or empty string
-      const role = participant.role || "";
-
-      if (!participantMap.has(participantId)) {
-        participantMap.set(
-          participantId,
-          new Array(activities.length).fill(false)
-        );
-      }
-
-      const activityIndex = activities.findIndex(
-        (act) => act.id === activity.id
-      );
-      participantMap.get(participantId)[activityIndex] = !!role; // Set true if role exists and is not empty
-    });
-  });
-
-  return participantMap;
-}
 
 export default {
   name: "AttendanceView",
   components: {},
   setup() {
-    console.log("AttendanceView setup()");
-    console.log("activities = " + JSON.stringify(activities));
-    // Get a mapping from scouts to attendance records
+    const activeMembers = computed(() => {
+      return members
+        .filter((member) => !member.archived)
+        .sort((a, b) => {
+          const nameA = `${a.preferredname} ${a.familyname}`.toLowerCase();
+          const nameB = `${b.preferredname} ${b.familyname}`.toLowerCase();
+          return nameA.localeCompare(nameB);
+        });
+    });
 
-    const activityAttendanceMap = buildParticipantMap();
+    const activityAttendanceMap = computed(() => {
+      const participantMap = new Map();
 
-    console.log(
-      "activityAttendanceMap = " + JSON.stringify(activityAttendanceMap)
-    );
+      // Initialize map for all active members to ensure every scout has a row.
+      // The default value for each activity is null (did not attend).
+      activeMembers.value.forEach((member) => {
+        participantMap.set(member.id, new Array(activities.length).fill(null));
+      });
+
+      // Populate the map with actual attendance data and roles.
+      activities.forEach((activity, activityIndex) => {
+        if (activity.participants) {
+          activity.participants.forEach((participant) => {
+            const { id: participantId, role } = participant;
+            if (participantId && participantMap.has(participantId)) {
+              participantMap.get(participantId)[activityIndex] = role;
+            }
+          });
+        }
+      });
+
+      return participantMap;
+    });
+
+    const getRoleIcon = (role) => {
+      switch (role) {
+        case "Leader":
+          return "🚩";
+        case "Helping":
+          return "🤝";
+        case "Attended":
+          return "👍";
+        default:
+          return "⬜";
+      }
+    };
+
     return {
       activityAttendanceMap,
+      activeMembers,
+      activities,
+      getRoleIcon,
     };
-  },
-  data: function () {
-    return {
-      members: members,
-      activities: activities,
-    };
-  },
-  methods: {},
-  beforeCreate() {
-    console.log("AttendanceView beforeCreate()");
-  },
-  beforeMount() {
-    console.log("AttendanceView beforeMount()");
-  },
-  mounted() {
-    console.log("AttendanceView mounted()");
-  },
-  beforeUnmount() {
-    console.log("AttendanceView beforeUnmount()");
-  },
-  unmounted() {
-    console.log("AttendanceView unmounted()");
-  },
-  beforeUpdate() {
-    console.log("AttendanceView beforeUpdate()");
-  },
-  unpdate() {
-    console.log("AttendanceView unpdate()");
   },
 };
 </script>
@@ -171,19 +158,5 @@ td {
 }
 .header {
   display: flex;
-}
-.cell-yes {
-  background: #83ac86;
-  color: black;
-}
-.cell-yes::after {
-  content: "👍";
-}
-.cell-no {
-  background: #eee;
-  color: black;
-}
-.cell-no::after {
-  content: "⬜";
 }
 </style>
