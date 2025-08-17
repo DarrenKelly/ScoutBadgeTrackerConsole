@@ -67,7 +67,9 @@ const routes = [
     path: "/badges/bymember",
     name: "By Member",
     component: () =>
-      import(/* webpackChunkName: "oas" */ "../views/OasView.vue"),
+      import(
+        /* webpackChunkName: "badges-by-member" */ "../views/BadgesByMemberView.vue"
+      ),
     meta: { requiresAuth: true },
   },
   {

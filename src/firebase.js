@@ -7,8 +7,10 @@ import {
   setDoc,
   getDocs,
   deleteDoc,
+  orderBy,
 } from "firebase/firestore";
 
+import { reactive } from "vue";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FireAuth, FireDB } from "./firebaseInit";
 
@@ -16,8 +18,8 @@ const FB_ACTIVITY_KEY = "/group/2ndGordon/section/cubs/activities";
 const FB_MEMBER_KEY = "/group/2ndGordon/members";
 const FB_CONFIG_KEY = "/group/2ndGordon/config";
 
-const activities = [];
-const members = [];
+const activities = reactive([]);
+const members = reactive([]);
 let config = { hideOldActivities: false, hideArchivedMembers: false };
 let user = null;
 
@@ -181,7 +183,7 @@ async function initialiseConfig(user) {
 // We don't ewant to load activities looking back to all time.
 // Use this constant to define how many months of old activities
 // the app should load by default.
-const DEFAULT_LOOKBACK_MONTHS = 12;
+const DEFAULT_LOOKBACK_MONTHS = 36;
 
 async function initialiseActivities() {
   let lookbackDate = new Date();
@@ -191,44 +193,41 @@ async function initialiseActivities() {
 
   const q = query(
     collection(FireDB.getInstance(), FB_ACTIVITY_KEY),
-    where("date", ">=", lookbackStr)
+    where("date", ">=", lookbackStr),
+    orderBy("date")
   );
 
-  let querySnapshot = await getDocs(q).catch((err) => {
-    console.error("Error returned by server:" + err);
-  });
+  try {
+    const querySnapshot = await getDocs(q);
+    activities.length = 0;
+    querySnapshot.forEach((doc) => {
+      let newActivity = {
+        id: doc.id,
+        name: doc.data().name,
+        type: doc.data().type,
+        challengeType: doc.data().challengeType,
+        date: doc.data().date,
+        duration: doc.data().duration,
+        location: doc.data().location,
+        hikeKms: doc.data().hikeKms,
+        theme: doc.data().theme,
+        note: doc.data().note,
+        participants: doc.data().participants,
+        ican: doc.data().ican,
+      };
+      if (newActivity.ican == undefined) {
+        newActivity.ican = new Array();
+      }
+      activities.push(newActivity);
+    });
 
-  if (!querySnapshot) {
+    activities.sort(compare);
+  } catch (err) {
+    console.error("Failed to fetch activities:", err);
     console.warn(
-      "querySnapshot is undefined, likely due to an error.  Check permissions and network connectivity."
+      "This error is often caused by a missing Firestore index. Please check the browser's developer console for an error message from Firebase that may include a link to create the required index."
     );
-    return;
   }
-  activities.length = 0;
-  querySnapshot.forEach((doc) => {
-    let newActivity = {
-      id: doc.id,
-      name: doc.data().name,
-      type: doc.data().type,
-      challengeType: doc.data().challengeType,
-      date: doc.data().date,
-      duration: doc.data().duration,
-      location: doc.data().location,
-      hikeKms: doc.data().hikeKms,
-      theme: doc.data().theme,
-      note: doc.data().note,
-      participants: doc.data().participants,
-      ican: doc.data().ican,
-    };
-    if (newActivity.ican == undefined) {
-      newActivity.ican = new Array();
-    }
-    activities.push(newActivity);
-  });
-
-  activities.sort(compare);
-
-  return activities;
 }
 
 function getISODate(inDate) {
