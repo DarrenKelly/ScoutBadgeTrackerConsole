@@ -2,6 +2,7 @@ export { oasStatements, challengeTypes, activityTypes, allOasStatements };
 
 const activityTypes = [
   "Camp",
+  "Campfire",
   "Canoeing",
   "Cycling",
   "Excursion",
@@ -9,10 +10,12 @@ const activityTypes = [
   "Flying Day",
   "Grey Wolf Hike",
   "Hike",
+  "Navigtion",
   "Overnight Hike",
   "Regular Meet",
+  "Sailing",
   "Unit Council",
-  "Virtual Meet",
+  "Vertical",
   "Water Skills",
 ];
 
