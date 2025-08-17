@@ -2,7 +2,7 @@
   <div
     @click="onClick"
     :class="[
-      this.isMobile() ? 'mobile_member' : 'member',
+      isMobile ? 'mobile_member' : 'member',
       member.archived ? 'archived' : '',
       state == 'Helping'
         ? 'helper'
@@ -61,9 +61,14 @@
 
 <script>
 import MemberForm from "@/components/MemberForm.vue";
+import { useMobileDetection } from "@/composables/useMobileDetection.js";
 
 export default {
   name: "ScoutMember",
+  setup() {
+    const { isMobile } = useMobileDetection();
+    return { isMobile };
+  },
   data() {
     return {
       showEditForm: false,
@@ -80,13 +85,6 @@ export default {
   },
   emits: ["update-member", "delete-member", "change-participation"],
   methods: {
-    isMobile() {
-      if (screen.width <= 760) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     onClick() {
       console.log("Clicked on Member with Id " + this.member.id);
       if (this.enableEdit) {

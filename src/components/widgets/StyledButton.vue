@@ -1,7 +1,7 @@
 <template>
   <button
     @click="onCLick()"
-    :class="[this.isMobile() ? 'mobile_btn' : 'btn']"
+    :class="[isMobile ? 'mobile_btn' : 'btn']"
     :style="{ background: colour }"
   >
     {{ button_text }}
@@ -9,20 +9,19 @@
 </template>
 
 <script>
+import { useMobileDetection } from "@/composables/useMobileDetection.js";
+
 export default {
   name: "StyledButton",
   props: {
     button_text: String,
     colour: String,
   },
+  setup() {
+    const { isMobile } = useMobileDetection();
+    return { isMobile };
+  },
   methods: {
-    isMobile() {
-      if (screen.width <= 760) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     onCLick() {
       console.log("Click " + this.button_text);
       this.$emit("clicked", this.button_text);

@@ -2,27 +2,27 @@
   <div
     @click="onClick"
     :class="[
-      this.isMobile() ? 'mobile_list_element' : '',
+      this.isMobile ? 'mobile_list_element' : '',
       activity.date < new Date().toISOString().split('T')[0] ? 'past' : '',
       selected ? 'selected' : '',
-      this.isMobile() ? 'mobile_activity' : 'activity',
+      this.isMobile ? 'mobile_activity' : 'activity',
     ]"
   >
-    <div :class="[isMobile() ? 'mob_title' : 'title']">
+    <div :class="[isMobile ? 'mob_title' : 'title']">
       {{ activity.name }}
 
-      <p :class="[isMobile() ? 'mob_date' : 'date']">
+      <p :class="[isMobile ? 'mob_date' : 'date']">
         {{ activity.date }} {{ activity.location }}
       </p>
     </div>
-    <div :class="[this.isMobile() ? 'mobile_midblockl' : 'midblockl']">
-      <div v-show="!this.isMobile()">Rollcall attendees:</div>
+    <div :class="[this.isMobile ? 'mobile_midblockl' : 'midblockl']">
+      <div v-show="!this.isMobile">Rollcall attendees:</div>
       ({{ activity.participants.length }} inc. {{ countYouths }} youths)
     </div>
     <div class="midblockr">
-      <ActivityIcon :icon_type="activity.type" :compact="!this.isMobile()" />
+      <ActivityIcon :icon_type="activity.type" :compact="!this.isMobile" />
     </div>
-    <div v-show="!this.isMobile()">
+    <div v-show="!this.isMobile">
       <i class="type">{{ activity.type }}</i>
     </div>
   </div>
@@ -39,9 +39,14 @@
 <script>
 import ActivityForm from "@/components/ActivityForm.vue";
 import ActivityIcon from "@/components/widgets/ActivityIcon.vue";
+import { useMobileDetection } from "@/composables/useMobileDetection.js";
 
 export default {
   name: "ScoutActivity",
+  setup() {
+    const { isMobile } = useMobileDetection();
+    return { isMobile };
+  },
   data() {
     return {
       showEditForm: false,
@@ -70,13 +75,6 @@ export default {
     "select-activity",
   ],
   methods: {
-    isMobile() {
-      if (screen.width <= 760) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     onClick() {
       console.log(
         "Clicked on Activity with Id " +

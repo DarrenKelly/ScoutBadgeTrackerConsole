@@ -100,10 +100,10 @@ input:checked + .slider:before {
 .switch-label {
   text-align: center;
   display: flex;
-  height: 100px;
-  width: 200px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  gap: 4px;
+  padding: 10px;
 }
 </style>

@@ -176,19 +176,22 @@
     <input
       type="submit"
       value="Save Member"
-      :class="[
-        this.isMobile() ? 'mobile_btn  mobile_btn-block' : 'btn btn-block',
-      ]"
+      :class="[isMobile ? 'mobile_btn  mobile_btn-block' : 'btn btn-block']"
     />
   </form>
 </template>
 
 <script>
 import ToggleSwitch from "@/components/widgets/ToggleSwitch.vue";
+import { useMobileDetection } from "@/composables/useMobileDetection.js";
 export default {
   name: "MemberForm",
   components: {
     ToggleSwitch,
+  },
+  setup() {
+    const { isMobile } = useMobileDetection();
+    return { isMobile };
   },
   data() {
     return {
@@ -219,13 +222,6 @@ export default {
   },
   emits: ["update-member", "delete-member"],
   methods: {
-    isMobile() {
-      if (screen.width <= 760) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     onSubmit() {
       if (!this.membertype) {
         alert("Please select an member type");

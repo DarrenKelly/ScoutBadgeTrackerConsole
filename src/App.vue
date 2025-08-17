@@ -15,10 +15,11 @@
   </div>
 </template>
 <script>
-import { ref, computed, onMounted, onBeforeUnmount, watchEffect } from "vue";
+import { ref, computed, onMounted, watchEffect } from "vue";
 import NavigationDesktop from "@/components/NavigationDesktop.vue";
 import NavigationMobile from "@/components/NavigationMobile.vue";
 import { initialise } from "./firebase";
+import { useMobileDetection } from "@/composables/useMobileDetection.js";
 
 export default {
   name: "App",
@@ -31,7 +32,7 @@ export default {
     );
     // --- STATE ---
     const hasLoadedData = ref(false);
-    const isMobile = ref(false);
+    const { isMobile } = useMobileDetection();
 
     // --- COMPUTED ---
     const backgroundColor = computed(() => {
@@ -48,26 +49,10 @@ export default {
       );
     });
 
-    // --- METHODS ---
-    const mediaQuery = window.matchMedia("(max-width: 760px)");
-    const handleMediaQueryChange = (e) => {
-      isMobile.value = e.matches;
-    };
-
     // --- LIFECYCLE HOOKS ---
     onMounted(async () => {
-      // Initial check
-      handleMediaQueryChange(mediaQuery);
-      // Add listener for changes
-      mediaQuery.addEventListener("change", handleMediaQueryChange);
-
       await initialise("darren");
       hasLoadedData.value = true;
-    });
-
-    onBeforeUnmount(() => {
-      // Clean up the listener to prevent memory leaks
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
     });
 
     return { hasLoadedData, isMobile, backgroundColor };

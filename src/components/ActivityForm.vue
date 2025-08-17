@@ -7,7 +7,7 @@
   </button>
   <form @submit.prevent="onSubmit" class="add-activity-form">
     <div class="typetable">
-      <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
+      <div :class="[isMobile ? 'mob_form-control' : 'form-control']">
         <label>Type</label>
         <select name="type" v-model="type" class="dropdown">
           <option
@@ -21,7 +21,7 @@
       </div>
       <ActivityIcon :icon_type="type" />
     </div>
-    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
+    <div :class="[isMobile ? 'mob_form-control' : 'desktop-form-field']">
       <label>Challenge Type</label>
       <select name="challenge" v-model="challengeType" class="dropdown">
         <option
@@ -33,43 +33,71 @@
         </option>
       </select>
     </div>
-    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
-      <label>Activity Name</label>
-      <input
-        type="text"
-        v-model="name"
-        name="name"
-        placeholder="activity Name"
-      />
+
+    <div class="desktop-form-row" v-if="!isMobile">
+      <div class="desktop-form-field">
+        <label>Activity Name</label>
+        <input
+          type="text"
+          v-model="name"
+          name="name"
+          placeholder="activity Name"
+        />
+      </div>
+      <div class="desktop-form-field">
+        <label>Day</label>
+        <input
+          type="date"
+          v-model="date"
+          name="date"
+          placeholder="YYYY-MM-DD"
+        />
+      </div>
     </div>
-    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
-      <label>Day</label>
-      <input type="date" v-model="date" name="date" placeholder="YYYY-MM-DD" />
+
+    <div class="desktop-form-row" v-if="!isMobile">
+      <div class="desktop-form-field">
+        <label>Location</label>
+        <input
+          type="text"
+          v-model="location"
+          name="location"
+          placeholder="Location"
+        />
+      </div>
+      <div class="desktop-form-field">
+        <label>Duration</label>
+        <input
+          type="text"
+          v-model="duration"
+          name="duration"
+          placeholder="# Hrs/Days"
+        />
+      </div>
     </div>
-    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
-      <label>Location</label>
-      <input
-        type="text"
-        v-model="location"
-        name="location"
-        placeholder="Location"
-      />
+
+    <div class="desktop-form-row" v-if="!isMobile">
+      <div class="desktop-form-field">
+        <label>Theme</label>
+        <input type="text" v-model="theme" name="theme" placeholder="" />
+      </div>
+      <div class="desktop-form-field">
+        <label>Note</label>
+        <input
+          type="text"
+          v-model="note"
+          name="note"
+          placeholder="Eg. Leader?"
+        />
+      </div>
     </div>
-    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
-      <label>Duration</label>
-      <input
-        type="text"
-        v-model="duration"
-        name="duration"
-        placeholder="# Hrs/Days"
-      />
-    </div>
+
     <div
       :class="[
         type && type.includes('Hike')
-          ? isMobile()
-            ? 'mob_form-control'
-            : 'form-control'
+          ? !isMobile
+            ? 'desktop-form-field'
+            : 'mob_form-control'
           : 'gone',
       ]"
     >
@@ -81,21 +109,64 @@
         placeholder="# Kms"
       />
     </div>
-    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
-      <label>Theme</label>
-      <input type="text" v-model="theme" name="theme" placeholder="" />
-    </div>
-    <div :class="[isMobile() ? 'mob_form-control' : 'form-control']">
-      <label>Note</label>
-      <input type="text" v-model="note" name="note" placeholder="Eg. Leader?" />
-    </div>
-    <input
-      type="submit"
-      value="Save Activity"
-      :class="[isMobile() ? 'mobile_btn mobile_btn-block' : 'btn btn-block']"
-    />
 
-    <div v-show="!this.isMobile()">
+    <!-- Mobile layout for form fields -->
+    <div v-if="isMobile">
+      <div class="mob_form-control">
+        <label>Activity Name</label>
+        <input
+          type="text"
+          v-model="name"
+          name="name"
+          placeholder="activity Name"
+        />
+      </div>
+      <div class="mob_form-control">
+        <label>Day</label>
+        <input
+          type="date"
+          v-model="date"
+          name="date"
+          placeholder="YYYY-MM-DD"
+        />
+      </div>
+      <div class="mob_form-control">
+        <label>Location</label>
+        <input
+          type="text"
+          v-model="location"
+          name="location"
+          placeholder="Location"
+        />
+      </div>
+      <div class="mob_form-control">
+        <label>Duration</label>
+        <input
+          type="text"
+          v-model="duration"
+          name="duration"
+          placeholder="# Hrs/Days"
+        />
+      </div>
+      <div class="mob_form-control">
+        <label>Theme</label>
+        <input type="text" v-model="theme" name="theme" placeholder="" />
+      </div>
+      <div class="mob_form-control">
+        <label>Note</label>
+        <input
+          type="text"
+          v-model="note"
+          name="note"
+          placeholder="Eg. Leader?"
+        />
+      </div>
+    </div>
+    <input type="submit" value="Save Activity" :class="['form-save-btn']" />
+
+    <hr v-if="!isMobile" class="desktop-separator" />
+
+    <div class="desktop-collapsable-container">
       <CollapsableOptionSet
         v-for="(oas, index) in oasOptions"
         :key="index"
@@ -112,6 +183,7 @@
 import { activityTypes, challengeTypes, oasStatements } from "@/scouting.js";
 import CollapsableOptionSet from "@/components/widgets/CollapsableOptionSet.vue";
 import ActivityIcon from "@/components/widgets/ActivityIcon.vue";
+import { useMobileDetection } from "@/composables/useMobileDetection.js";
 
 function concatenateAll(arrayArray) {
   let retVal = new Array();
@@ -130,6 +202,10 @@ export default {
   components: {
     CollapsableOptionSet,
     ActivityIcon,
+  },
+  setup() {
+    const { isMobile } = useMobileDetection();
+    return { isMobile };
   },
   data() {
     return {
@@ -163,13 +239,6 @@ export default {
   },
   emits: ["update-activity", "delete-activity"],
   methods: {
-    isMobile() {
-      if (screen.width <= 760) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     onSubmit() {
       if (!this.type) {
         alert("Please select an activity type");
@@ -335,5 +404,89 @@ export default {
 
 .img-container {
   display: flex;
+}
+
+/* Desktop-specific form styling */
+.desktop-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.desktop-form-field {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 15px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.desktop-form-field label {
+  display: block;
+  font-weight: 500;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.desktop-form-field input,
+.desktop-form-field select {
+  width: 100%;
+  max-width: 300px;
+  height: 40px;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.desktop-form-field input[type="date"] {
+  max-width: 200px;
+}
+
+.form-save-btn {
+  background: var(--scoutpurple, #6a4c93);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  margin: 20px auto;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  display: block;
+  width: auto;
+  min-width: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.mobile-full-width {
+  width: 100%;
+  min-width: unset;
+}
+
+.form-save-btn:hover {
+  background: #5a3c83;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.form-save-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.desktop-separator {
+  margin: 30px 0 20px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.desktop-collapsable-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
 }
 </style>

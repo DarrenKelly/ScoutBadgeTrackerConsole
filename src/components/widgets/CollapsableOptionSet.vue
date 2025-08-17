@@ -1,21 +1,27 @@
 <template>
-  <button type="button" @click="toggleButtonClicked()">
-    {{ sectionTitle }}
-  </button>
-  <div :class="['content', this.contentVisible ? 'visible' : 'invisible']">
-    <ul v-for="(set, index) in labelset" :key="index">
-      <label class="set-title">{{ set.type }}</label>
-      <ul class="togglelist">
-        <li v-for="(label, index) in set.statements" :key="index">
-          <ToggleSwitch
-            :checked="this.selected.includes(label)"
-            :labelText="label"
-            @unchecked="removeText"
-            @checked="addText"
-          />
-        </li>
+  <div>
+    <button
+      type="button"
+      @click="toggleButtonClicked()"
+      class="collapsable-toggle-btn"
+    >
+      {{ sectionTitle }}
+    </button>
+    <div :class="['content', this.contentVisible ? 'visible' : 'invisible']">
+      <ul v-for="(set, index) in labelset" :key="index">
+        <label class="set-title">{{ set.type }}</label>
+        <ul class="togglelist">
+          <li v-for="(label, index) in set.statements" :key="index">
+            <ToggleSwitch
+              :checked="this.selected.includes(label)"
+              :labelText="label"
+              @unchecked="removeText"
+              @checked="addText"
+            />
+          </li>
+        </ul>
       </ul>
-    </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -67,12 +73,12 @@ export default {
 
 <style scoped>
 .set-title {
-  display: flex;
-  justify-content: center;
+  display: block;
   text-align: center;
-  background: #ccc;
-  width: 75%;
-  height: 15px;
+  width: 100%;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .visible {
@@ -86,20 +92,37 @@ ul li::marker {
   content: "";
 }
 
-ul {
+.togglelist {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .togglelist li {
-  float: left;
   margin: 20px 0;
 }
 
-button {
-  height: 35px;
-  width: 80%;
-  background-color: #bbb;
-  color: black;
+.collapsable-toggle-btn {
+  height: 40px;
+  width: 100%;
+  background-color: #e9ecef;
+  color: #495057;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.collapsable-toggle-btn:hover {
+  background-color: #dee2e6;
+  border-color: #adb5bd;
+}
+
+.collapsable-toggle-btn:active {
+  background-color: #ced4da;
+  transform: scale(0.98);
 }
 </style>
