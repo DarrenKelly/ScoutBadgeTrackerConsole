@@ -1,5 +1,10 @@
 <template>
   <div class="badges-by-member">
+    <div class="save-button-container" v-if="hasSelectedBadges">
+      <button class="save-button" @click="savePresentedBadges">
+        Save Presented Badges
+      </button>
+    </div>
     <table class="badges-table">
       <thead>
         <tr class="header-row">
@@ -26,9 +31,10 @@
           <td
             v-for="(badge, index) in badges"
             :key="index"
-            :class="[index % 2 == 0 ? 'c1' : 'c2']"
+            :class="[index % 2 == 0 ? 'c1' : 'c2', 'badge-cell']"
+            @click="toggleBadge(scout.id, badge)"
           >
-            {{ earnedBadgesMap.get(scout.id)?.has(badge) ? "🎖️" : "⬜" }}
+            {{ getBadgeDisplay(scout.id, badge) }}
           </td>
         </tr>
       </tbody>
@@ -37,12 +43,16 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { members, activities } from "@/firebase";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { FireDB } from "@/firebaseInit";
 
 export default {
   name: "BadgesByMemberView",
   setup() {
+    const selectedBadges = ref(new Map()); // Map of scoutId -> Set of badge names
+    const presentedBadges = ref(new Map()); // Map of scoutId -> Set of presented badge names
     const badges = [
       "Milestone 1",
       "Milestone 2",
@@ -205,10 +215,125 @@ export default {
       return map;
     });
 
+    const hasSelectedBadges = computed(() => {
+      for (let [, badgeSet] of selectedBadges.value) {
+        if (badgeSet.size > 0) return true;
+      }
+      return false;
+    });
+
+    const getBadgeDisplay = (scoutId, badge) => {
+      const isEarned = earnedBadgesMap.value.get(scoutId)?.has(badge);
+      const isPresented = presentedBadges.value.get(scoutId)?.has(badge);
+      const isSelected = selectedBadges.value.get(scoutId)?.has(badge);
+
+      if (isPresented) return "✅"; // Already presented
+      if (isSelected && isEarned) return "☑️"; // Selected for presentation
+      if (isEarned) return "🎖️"; // Earned but not presented
+      return "⬜"; // Not earned
+    };
+
+    const toggleBadge = (scoutId, badge) => {
+      const isEarned = earnedBadgesMap.value.get(scoutId)?.has(badge);
+      const isPresented = presentedBadges.value.get(scoutId)?.has(badge);
+      // Can only toggle earned badges that haven't been presented
+      if (!isEarned || isPresented) return;
+
+      if (!selectedBadges.value.has(scoutId)) {
+        selectedBadges.value.set(scoutId, new Set());
+      }
+
+      const scoutBadges = selectedBadges.value.get(scoutId);
+      if (scoutBadges.has(badge)) {
+        scoutBadges.delete(badge);
+      } else {
+        scoutBadges.add(badge);
+      }
+    };
+
+    const loadPresentedBadges = async () => {
+      const newPresentedBadges = new Map();
+
+      for (const scout of activeYouthMembers.value) {
+        try {
+          const memberDoc = await getDoc(
+            doc(FireDB.getInstance(), "/group/2ndGordon/members", scout.id)
+          );
+          if (memberDoc.exists()) {
+            const awards = memberDoc.data().awards || [];
+            const presentedSet = new Set(awards.map((award) => award.name));
+            newPresentedBadges.set(scout.id, presentedSet);
+          } else {
+            newPresentedBadges.set(scout.id, new Set());
+          }
+        } catch (error) {
+          console.error(`Error loading awards for scout ${scout.id}:`, error);
+          newPresentedBadges.set(scout.id, new Set());
+        }
+      }
+
+      presentedBadges.value = newPresentedBadges;
+    };
+
+    const savePresentedBadges = async () => {
+      const today = new Date().toISOString().split("T")[0];
+
+      try {
+        for (const [scoutId, badgeSet] of selectedBadges.value) {
+          if (badgeSet.size === 0) continue;
+
+          const newAwards = Array.from(badgeSet).map((badge) => ({
+            name: badge,
+            date: today,
+          }));
+
+          const memberRef = doc(
+            FireDB.getInstance(),
+            "/group/2ndGordon/members",
+            scoutId
+          );
+
+          // Get current member data to check if awards collection exists
+          const memberDoc = await getDoc(memberRef);
+          if (memberDoc.exists()) {
+            const currentAwards = memberDoc.data().awards || [];
+            const updatedAwards = [...currentAwards, ...newAwards];
+
+            await updateDoc(memberRef, {
+              awards: updatedAwards,
+            });
+          }
+
+          // Add to presented badges map
+          if (!presentedBadges.value.has(scoutId)) {
+            presentedBadges.value.set(scoutId, new Set());
+          }
+          const scoutPresented = presentedBadges.value.get(scoutId);
+          badgeSet.forEach((badge) => scoutPresented.add(badge));
+        }
+
+        // Clear selections
+        selectedBadges.value.clear();
+
+        alert("Badges have been marked as presented!");
+      } catch (error) {
+        console.error("Error saving presented badges:", error);
+        alert("Error saving presented badges: " + error.message);
+      }
+    };
+
+    onMounted(() => {
+      loadPresentedBadges();
+    });
+
     return {
       activeYouthMembers,
       badges,
       earnedBadgesMap,
+      getBadgeDisplay,
+      toggleBadge,
+      hasSelectedBadges,
+      savePresentedBadges,
     };
   },
 };
@@ -250,5 +375,30 @@ td {
 }
 .keeptogether {
   white-space: nowrap;
+}
+.save-button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.save-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+.save-button:hover {
+  background-color: #45a049;
+}
+.badge-cell {
+  cursor: pointer;
+  user-select: none;
+}
+.badge-cell:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
