@@ -1,10 +1,44 @@
 <template>
   <div class="img-container">
     <img
+      src="@/assets/Theatre.png"
+      :class="[
+        icon_type && icon_type.includes('Incursion')
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
+      src="@/assets/Theatre2.png"
+      :class="[
+        icon_type && icon_type.includes('Excursion')
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
+      src="@/assets/Bike.png"
+      :class="[
+        icon_type && icon_type.includes('Cycling')
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
       src="@/assets/Water.png"
       :class="[
         icon_type &&
-        (icon_type.includes('Water') || icon_type.includes('Canoe'))
+        (icon_type.includes('Water') ||
+          icon_type.includes('Canoe') ||
+          icon_type.includes('Sailing'))
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
+      src="@/assets/Sail.png"
+      :class="[
+        icon_type && icon_type.includes('Sailing')
           ? 'icon' + (compact ? ' compact' : '')
           : 'gone',
       ]"
