@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { config, activities } from "@/firebase";
-import Badges from "../components/Badges";
 import { FireAuth } from "@/firebaseInit";
 
 const routes = [
@@ -53,22 +52,9 @@ const routes = [
   {
     path: "/badges",
     name: "Badges",
-    component: Badges,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/badges/bybadge",
-    name: "By Badge",
-    component: () =>
-      import(/* webpackChunkName: "oas" */ "../views/OasView.vue"),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/badges/bymember",
-    name: "By Member",
     component: () =>
       import(
-        /* webpackChunkName: "badges-by-member" */ "../views/BadgesByMemberView.vue"
+        /* webpackChunkName: "Badges" */ "../views/BadgesByMemberView.vue"
       ),
     meta: { requiresAuth: true },
   },
