@@ -28,7 +28,7 @@
             :key="index"
             :class="[index % 2 == 0 ? 'c1' : 'c2']"
           >
-            {{ earnedBadgesMap.get(scout.id)?.has(badge) ? "✔️" : "⬜" }}
+            {{ earnedBadgesMap.get(scout.id)?.has(badge) ? "🎖️" : "⬜" }}
           </td>
         </tr>
       </tbody>
