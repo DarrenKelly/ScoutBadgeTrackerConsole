@@ -304,6 +304,14 @@ export default {
     this.participants = this.prefill.participants;
     this.ican = this.prefill.ican;
 
+    // If this is a new activity (no prefill id), set some defaults.
+    if (!this.id) {
+      this.type = "Regular Meet";
+      this.location = "Hall";
+      this.date = new Date().toISOString().split("T")[0];
+      this.duration = "2.5 hrs";
+    }
+
     oasStatements;
   },
 };
