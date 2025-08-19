@@ -62,8 +62,15 @@
     <img
       src="@/assets/CampFire.png"
       :class="[
-        icon_type &&
-        (icon_type.includes('Camp') || icon_type.includes('Overnight'))
+        icon_type && icon_type === 'Campfire'
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
+      src="@/assets/Tent.png"
+      :class="[
+        icon_type && (icon_type === 'Camp' || icon_type.includes('Overnight'))
           ? 'icon' + (compact ? ' compact' : '')
           : 'gone',
       ]"
