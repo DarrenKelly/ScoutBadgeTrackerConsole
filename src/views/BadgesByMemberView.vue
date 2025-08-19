@@ -81,7 +81,7 @@ export default {
 
     const activeYouthMembers = computed(() => {
       return members
-        .filter((member) => !member.archived && member.membertype !== "leader")
+        .filter((member) => !member.archived && member.membertype === "Youth")
         .sort((a, b) => {
           const nameA = `${a.preferredname} ${a.familyname}`.toLowerCase();
           const nameB = `${b.preferredname} ${b.familyname}`.toLowerCase();
