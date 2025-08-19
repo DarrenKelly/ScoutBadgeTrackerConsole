@@ -120,4 +120,13 @@ export default {
 .clear-btn:hover {
   background: #7f8c8d;
 }
+
+/* Media query for smaller screens to make buttons larger */
+@media (max-width: 768px) {
+  .toggle-btn,
+  .clear-btn {
+    padding: 12px 16px;
+    font-size: 24px;
+  }
+}
 </style>

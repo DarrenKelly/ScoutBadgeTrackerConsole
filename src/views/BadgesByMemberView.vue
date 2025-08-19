@@ -54,6 +54,7 @@ export default {
     const selectedBadges = ref(new Map()); // Map of scoutId -> Set of badge names
     const presentedBadges = ref(new Map()); // Map of scoutId -> Set of presented badge names
     const badges = [
+      "Invested",
       "Milestone 1",
       "Milestone 2",
       "Milestone 3",
@@ -135,6 +136,14 @@ export default {
 
         if (totalCampNights >= 10) earned.add("10 nights camping");
         if (totalCampNights >= 25) earned.add("25 nights camping");
+
+        // --- Check for Investiture ---
+        const isInvested = activities.some(
+          (activity) =>
+            activity.type === "Investiture" &&
+            activity.participants?.some((p) => p.id === scout.id)
+        );
+        if (isInvested) earned.add("Invested");
 
         // --- Check for sailing activity ---
         const hasSailed = activities.some(

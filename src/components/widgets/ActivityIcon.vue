@@ -84,6 +84,14 @@
       ]"
     />
     <img
+      src="@/assets/Invest.png"
+      :class="[
+        icon_type && icon_type === 'Investiture'
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
       src="@/assets/Tent.png"
       :class="[
         icon_type && (icon_type === 'Camp' || icon_type.includes('Overnight'))
