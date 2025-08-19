@@ -99,6 +99,22 @@
           : 'gone',
       ]"
     />
+    <img
+      src="@/assets/Regular Meet.png"
+      :class="[
+        icon_type && icon_type === 'Regular Meet'
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
+      src="@/assets/Map.png"
+      :class="[
+        icon_type && icon_type === 'Navigation'
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
   </div>
 </template>
 

@@ -199,13 +199,13 @@ export default {
         if (totalBikeMeets >= 3) earned.add("Bike 2");
 
         // --- Check for Campfire activities ---
-        const totalNavigtionMeets = activities.filter(
+        const totalNavigationMeets = activities.filter(
           (activity) =>
             activity.type === "Navigation" &&
             activity.participants?.some((p) => p.id === scout.id)
         ).length;
-        if (totalNavigtionMeets >= 1) earned.add("Compass");
-        if (totalNavigtionMeets >= 4) earned.add("Compass 2");
+        if (totalNavigationMeets >= 1) earned.add("Compass");
+        if (totalNavigationMeets >= 4) earned.add("Compass 2");
 
         // Future badge logic will be added here
 
