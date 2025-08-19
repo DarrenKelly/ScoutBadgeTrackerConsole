@@ -25,6 +25,14 @@
       ]"
     />
     <img
+      src="@/assets/Council.png"
+      :class="[
+        icon_type && icon_type.includes('Council')
+          ? 'icon' + (compact ? ' compact' : '')
+          : 'gone',
+      ]"
+    />
+    <img
       src="@/assets/Water.png"
       :class="[
         icon_type &&
