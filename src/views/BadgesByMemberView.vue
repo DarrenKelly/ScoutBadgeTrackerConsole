@@ -230,7 +230,7 @@ export default {
       if (isPresented) return "✅"; // Already presented
       if (isSelected && isEarned) return "☑️"; // Selected for presentation
       if (isEarned) return "🎖️"; // Earned but not presented
-      return "⬜"; // Not earned
+      return "─"; // Not earned
     };
 
     const toggleBadge = (scoutId, badge) => {
