@@ -11,6 +11,7 @@ const activityTypes = [
   "Grey Wolf Hike",
   "Hike",
   "Incursion",
+  "Investiture",
   "Navigation",
   "Overnight Hike",
   "Regular Meet",
